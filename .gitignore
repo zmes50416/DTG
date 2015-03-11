@@ -1,0 +1,38 @@
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# Intellij
+.idea/
+*.iml
+*.iws
+######################
+# Mac
+######################
+.DS_Store
+.svn
+# Thumbnails
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+######################
+# Maven
+######################
+log/
+target/
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
