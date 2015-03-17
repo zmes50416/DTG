@@ -18,5 +18,13 @@
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>	
+    <dependency>
+    <groupId>Qtag</groupId>
+    <artifactId>Qtag</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/Qtag.jar</systemPath>
+</dependency>
+    
 </dependencies>
 </project>
