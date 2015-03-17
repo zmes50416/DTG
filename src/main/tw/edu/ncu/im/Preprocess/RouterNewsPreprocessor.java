@@ -26,9 +26,8 @@ public class RouterNewsPreprocessor extends PreprocessComponent<KeyTerm,GoogleDi
 			//TODO 判斷是否為可讀寫且為txt 否則throw Exception
 		}
 		try(BufferedReader r = new BufferedReader(new FileReader(doc));){
-			this.docGraph = new UndirectedSparseGraph<KeyTerm,GoogleDistance>();
+			this.documentGraph = new UndirectedSparseGraph<KeyTerm,GoogleDistance>();
 			for(String line=r.readLine();line!=null;line = r.readLine()){
-				String line2=line.toString();
 				line=line.replace("]", "");
 				line=line.replace("[", "");
 				line=line.replace("<", "");
@@ -37,11 +36,10 @@ public class RouterNewsPreprocessor extends PreprocessComponent<KeyTerm,GoogleDi
 		        Matcher m = Pattern.compile("[(),.\"\\?!:;]").matcher(line);
 
 		        line = m.replaceAll("");
-		        line2 = m.replaceAll(",");
 				List<String> tokens = this.tokenize(line);
 				for(String token:tokens){
 					KeyTerm k = new KeyTerm(token);
-					this.docGraph.addVertex(k);
+					this.documentGraph.addVertex(k);
 				}
 				
 				
@@ -50,7 +48,7 @@ public class RouterNewsPreprocessor extends PreprocessComponent<KeyTerm,GoogleDi
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return this.docGraph;
+		return this.documentGraph;
 		
 	}
 	private List<String> tokenize(String line){

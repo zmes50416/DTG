@@ -11,7 +11,19 @@ import edu.uci.ics.jung.graph.Graph;
  * @param <E>
  */
 public abstract class PreprocessComponent<V extends Node<?>,E extends Edge> {
-	IODelegater writer;
-	Graph<V,E> docGraph;
+	private IODelegater docuemtIO;
+	public IODelegater getDocuemtIO() {
+		return docuemtIO;
+	}
+	public void setDocuemtIO(IODelegater docuemtIO) {
+		this.docuemtIO = docuemtIO;
+	}
+	public Graph<V, E> getDocumentGraph() {
+		return documentGraph;
+	}
+	public void setDocumentGraph(Graph<V, E> documentGraph) {
+		this.documentGraph = documentGraph;
+	}
+	protected Graph<V,E> documentGraph;
 	public abstract Graph<V,E> execute(File doc);
 }
