@@ -29,4 +29,9 @@ public class KeyTerm implements Node<Integer>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public String toString(){
+		return name;
+		
+	}
 }

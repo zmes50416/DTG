@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
+import tw.edu.ncu.im.Preprocess.graph.*;
 import edu.uci.ics.jung.graph.Graph;
 
 public class RouterNewsPreprocessorTest {

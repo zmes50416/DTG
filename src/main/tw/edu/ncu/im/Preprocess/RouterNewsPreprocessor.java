@@ -63,17 +63,3 @@ public class RouterNewsPreprocessor extends PreprocessComponent<KeyTerm,GoogleDi
 	
 	
 }
-class GoogleDistance implements Edge{
-
-	double distance;
-	
-	public GoogleDistance(double dist){
-		this.distance = dist;
-	}
-	@Override
-	public double getDistance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-}
