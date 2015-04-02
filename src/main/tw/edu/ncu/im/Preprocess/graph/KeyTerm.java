@@ -1,8 +1,8 @@
 package tw.edu.ncu.im.Preprocess.graph;
 
-public class KeyTerm implements Node<Integer>{
+public class KeyTerm implements Node<Double>{
 	String name;
-	Integer Freq;
+	Double Freq;
 	public KeyTerm(String _name) {
 		this.name = _name;
 		this.Freq = 1;
@@ -14,7 +14,7 @@ public class KeyTerm implements Node<Integer>{
 			throw new ClassCastException();
 		}else{
 			KeyTerm otherTerm = (KeyTerm)o;
-			if(otherTerm.name.endsWith(this.name)){
+			if(otherTerm.name.equals(this.name)){
 				return true;
 			}else{
 				return false;
@@ -25,9 +25,8 @@ public class KeyTerm implements Node<Integer>{
 	}
 
 	@Override
-	public Integer getValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public Double getValue() {
+		return this.Freq;
 	}
 	@Override
 	public String toString(){
