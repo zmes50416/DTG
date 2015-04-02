@@ -40,24 +40,7 @@ public class TXTDelegaterTest {
 		Files.delete(testDir);
 	}
 
-	private class MockComponent extends PreprocessComponent<Node<?>,Edge>{
-
-		public MockComponent(){
-			this.documentGraph = new UndirectedSparseGraph<Node<?>,Edge>();
-			KeyTerm t = new KeyTerm("test");
-			KeyTerm t2 = new KeyTerm("Apple");
-			GoogleDistance e = new GoogleDistance(1);
-			this.documentGraph.addVertex(t);
-			this.documentGraph.addVertex(t2);
-			this.documentGraph.addEdge(e, t, t2);
-		}
-		@Override
-		public Graph<Node<?>, Edge> execute(File doc) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-	}
+	
 	@Test
 	public void testStore() {
 		PreprocessComponent<Node<?>,Edge> c = new MockComponent();

@@ -5,7 +5,7 @@ public class KeyTerm implements Node<Double>{
 	Double Freq;
 	public KeyTerm(String _name) {
 		this.name = _name;
-		this.Freq = 1;
+		this.Freq = 1.0;
 	}
 
 	@Override
