@@ -1,6 +1,9 @@
 package tw.edu.ncu.im.Preprocess;
 
 import java.io.File;
+
+import org.apache.commons.collections15.Factory;
+
 import tw.edu.ncu.im.Preprocess.graph.*;
 import edu.uci.ics.jung.graph.Graph;
 /**
@@ -10,10 +13,18 @@ import edu.uci.ics.jung.graph.Graph;
  * @param <V> 
  * @param <E>
  */
-public abstract class PreprocessComponent<V extends Node<?>,E extends Edge> {
+public abstract class PreprocessComponent<V,E> {
 
 	protected Graph<V,E> documentGraph;
+	protected Factory<V> vertexFactory;
+	protected Factory<E> edgeFactory;
 	
+	public Factory<V> getVertexFactory() {
+		return vertexFactory;
+	}
+	public Factory<E> getEdgeFactory() {
+		return edgeFactory;
+	}
 	public Graph<V, E> getDocumentGraph() {
 		return documentGraph;
 	}

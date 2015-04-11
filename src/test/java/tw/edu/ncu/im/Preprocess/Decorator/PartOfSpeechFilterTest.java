@@ -12,7 +12,7 @@ import tw.edu.ncu.im.Preprocess.graph.GoogleDistance;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.Node;
 
-public class PartOfSpeechDecoratorTest{
+public class PartOfSpeechFilterTest{
 
 	MockComponent mockGraph;
 	@Before
@@ -23,7 +23,7 @@ public class PartOfSpeechDecoratorTest{
 
 	@Test
 	public void test() {
-		PartOfSpeechDecorator<Node<?>, Edge> p = new PartOfSpeechDecorator<Node<?>, Edge>(mockGraph);
+		PartOfSpeechFilter<Node<?>, Edge> p = new PartOfSpeechFilter<Node<?>, Edge>(mockGraph);
 		p.execute(null);
 		p.getDocumentGraph();
 	}
