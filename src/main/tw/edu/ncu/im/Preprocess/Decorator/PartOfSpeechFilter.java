@@ -21,17 +21,29 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  * Part of speech filter,提供節點內的詞性資訊，並且過濾非規定的詞性
+ * POS的作法會被字詞內容所影響，務必使用完整的字句以得到正確的詞性結果
  * @author Dean
  *
  */
 public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
-	HashMap<V,String> vertexTerms = new HashMap<V,String>();//Transform
+	/** 
+	 * 節點的字詞內容配對保持在此，在<code>execute()</code>以後可以從此得到POS過濾結果
+	 */
+	HashMap<V,String> vertexTerms = new HashMap<V,String>();
+	/**
+	 * Constructor, 連結元件
+	 * @param _component latest document graph
+	 * @param _vertextTerms mapping between String content and Vertex
+	 */
 	public PartOfSpeechFilter(PreprocessComponent<V,E> _component,HashMap<V,String> _vertextTerms){
 		this.originComponent = _component;
+		this.vertexFactory = this.originComponent.getVertexFactory();
+		this.edgeFactory = this.originComponent.getEdgeFactory();
 		this.vertexTerms = _vertextTerms;
 	}
 	/**
-	 * 過濾非NN,NP的詞性
+	 * 過濾非NN,NP的詞性，並且尋找可能的複合單字
+	 * P.S. 過去的圖形會被丟棄， 依據節點內容來重新建立新的節點，無連線
 	 */
 	@Override
 	public Graph<V, E> execute(File doc) {
@@ -41,18 +53,21 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 		this.documentGraph = new UndirectedSparseGraph<V,E>();
 		Collection<V> terms = originGraph.getVertices();
 		HashMap<V,String> newVertexTerms = new HashMap<>();
-		List<String> pharses = new ArrayList<>();
+		List<String> pharses = new ArrayList<>();//all possible terms
+		
 		for(V term:terms){
 			String content = this.vertexTerms.get(term);
 			List<String> tokens = this.tokenize(content);
-			pharses.addAll(this.compoundPharse((String[]) tokens.toArray()));
+			String[] tokensArray = new String[tokens.size()];
+			tokensArray = tokens.toArray(tokensArray);
+			pharses.addAll(this.compoundPharse(tokensArray));
 		}
-		Factory<V> vertexFactory = this.originComponent.getVertexFactory();
 		for(String pharse:pharses){
-			V node = vertexFactory.create();
+			V node = this.vertexFactory.create();
 			newVertexTerms.put(node, pharse);
 			this.documentGraph.addVertex(node);
 		}
+		this.vertexTerms = newVertexTerms;
 		
 		return this.documentGraph;
 	}
@@ -70,7 +85,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 			Tagger tagger = new Tagger("qtag-eng");
 			List<String> pharses = new ArrayList<>();
 			String[] tags = tagger.tag(sentence);
-			for (int i = 0; i <= sentence.length; i++) {
+			for (int i = 0; i < sentence.length; i++) {
 				String key3 = sentence[i];
 				String word;
 				if ((tags[i].equals("NN") || tags[i].equals("NP"))) { 	// 單字過濾，根據D. Tufis and O. Mason於1998提出的Qtag
@@ -91,7 +106,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 								pharses.add(combineThirdPharse);
 							}
 						}
-					} catch (IndexOutOfBoundsException e) {
+					} catch (ArrayIndexOutOfBoundsException e) {
 						// 字詞找不到可以連接的更前面字詞,會發生在前1或2的單詞的地方 Do nothing
 					}
 
