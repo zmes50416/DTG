@@ -23,6 +23,16 @@
 			<version>5.0.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<version>3.2</version>
+		</dependency>
+		<dependency>
 			<groupId>Qtag</groupId>
 			<artifactId>Qtag</artifactId>
 			<version>1.0</version>
