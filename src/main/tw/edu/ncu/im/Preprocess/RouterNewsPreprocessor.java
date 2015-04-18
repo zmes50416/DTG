@@ -24,8 +24,9 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	HashSet<KeyTerm> terms;
 	HashSet<GoogleDistance> edges;
 	HashMap<V,String> vertexContent = new HashMap<>();
-	public RouterNewsPreprocessor(Factory<V> _vertexFactory){
+	public RouterNewsPreprocessor(Factory<V> _vertexFactory,Factory<E>_edgeFactory){
 		this.vertexFactory = _vertexFactory;
+		this.edgeFactory = _edgeFactory;
 	}
 	@Override
 	public Graph<V,E> execute(File doc) {
@@ -45,16 +46,6 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 				V node = this.vertexFactory.create();
 				this.vertexContent.put(node, line);
 				this.documentGraph.addVertex(node);
-
-		        
-				//List<String> tokens = this.tokenize(line);
-				
-				//for(String token:tokens){
-				//	KeyTerm k = new KeyTerm(token);
-					
-				//}
-				
-				
 				
 			}
 		}catch(IOException e){
