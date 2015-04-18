@@ -36,9 +36,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 	 * @param _vertextTerms mapping between String content and Vertex
 	 */
 	public PartOfSpeechFilter(PreprocessComponent<V,E> _component,HashMap<V,String> _vertextTerms){
-		this.originComponent = _component;
-		this.vertexFactory = this.originComponent.getVertexFactory();
-		this.edgeFactory = this.originComponent.getEdgeFactory();
+		super(_component);		
 		this.vertexTerms = _vertextTerms;
 	}
 	/**

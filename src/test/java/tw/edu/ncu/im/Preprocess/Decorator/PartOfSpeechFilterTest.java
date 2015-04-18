@@ -31,7 +31,15 @@ public class PartOfSpeechFilterTest{
 				return new Term();
 			}
 			 
-		 });
+		 }).anyTimes();
+		 expect(mockGraph.getEdgeFactory()).andReturn(new Factory<GoogleDistance>(){
+
+			@Override
+			public GoogleDistance create() {
+				return null;
+			}
+			 
+		 }).anyTimes();
 		replay(mockGraph);
 	}
 
