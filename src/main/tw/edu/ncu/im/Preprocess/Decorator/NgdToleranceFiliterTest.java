@@ -81,7 +81,6 @@ public class NgdToleranceFiliterTest{
 		
 		
 		assertNull(this.graph.findEdge(term1, term2));
-		assert
 		assertEquals(1, testGraph.getEdgeCount());
 	}
 

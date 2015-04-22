@@ -59,7 +59,7 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 			for(V node:this.documentGraph.getNeighbors(weakNode)){
 				E neighborEdge = this.documentGraph.findEdge(weakNode, node);
 				Pair<V> nPair = this.documentGraph.getEndpoints(neighborEdge);
-				Double value = this.edgeDistanceMap.get(node);
+				Double value = this.edgeDistanceMap.get(neighborEdge);
 
 				if(node.equals(strongNode)){
 					continue;
