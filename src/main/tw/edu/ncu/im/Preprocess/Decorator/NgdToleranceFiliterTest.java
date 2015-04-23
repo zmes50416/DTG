@@ -18,23 +18,23 @@ import tw.edu.ncu.im.Preprocess.graph.*;
 
 public class NgdToleranceFiliterTest{
 
-	NgdToleranceFiliter<KeyTerm,GoogleDistance> testSubject;
-	private PreprocessComponent<KeyTerm,GoogleDistance> mockComp;
-	private Graph<KeyTerm,GoogleDistance> graph;
-	private HashMap<GoogleDistance, Double> edgeMaps;
+	NgdToleranceFiliter<KeyTerm,TestEdge> testSubject;
+	private PreprocessComponent<KeyTerm,TestEdge> mockComp;
+	private Graph<KeyTerm,TestEdge> graph;
+	private HashMap<TestEdge, Double> edgeMaps;
 	private HashMap<KeyTerm, Double> termMaps;
 	@Before
 	public void setUp() throws Exception {
 		graph = new UndirectedSparseGraph<>();
 		mockComp = createMock(PreprocessComponent.class);
-		edgeMaps = new HashMap<GoogleDistance,Double>();
+		edgeMaps = new HashMap<TestEdge,Double>();
 		termMaps = new HashMap<KeyTerm, Double>();
 		expect(mockComp.execute(null)).andReturn(graph);
-		expect(mockComp.getEdgeFactory()).andReturn(new Factory<GoogleDistance>(){
+		expect(mockComp.getEdgeFactory()).andReturn(new Factory<TestEdge>(){
 
 			@Override
-			public GoogleDistance create() {
-				return null;
+			public TestEdge create() {
+				return new TestEdge(0);
 			}
 			
 		});
@@ -63,25 +63,34 @@ public class NgdToleranceFiliterTest{
 		KeyTerm term1 = new KeyTerm("Google");
 		KeyTerm term2 = new KeyTerm("Samsung");
 		KeyTerm term3 = new KeyTerm("Apple");
-		GoogleDistance edge1 = new GoogleDistance(0.01);
-		GoogleDistance edge2 = new GoogleDistance(0.5);
-		GoogleDistance edge3 = new GoogleDistance(0.4);
+		KeyTerm term4 = new KeyTerm("Microsoft");
+		TestEdge edge1 = new TestEdge(0.01);
+		TestEdge edge2 = new TestEdge(0.5);
+		TestEdge edge3 = new TestEdge(0.4);
+		TestEdge edge4 = new TestEdge(0.8);
 		graph.addEdge(edge1, term1, term2);
 		graph.addEdge(edge2, term1, term3);
 		graph.addEdge(edge3, term2, term3);
+		graph.addEdge(edge4, term4, term2);
 		this.edgeMaps.put(edge1, 0.01);
 		this.edgeMaps.put(edge2, 0.5);
 		this.edgeMaps.put(edge3, 0.4);
+		this.edgeMaps.put(edge4, 0.8);
 		termMaps.put(term1, 3.0);
 		termMaps.put(term2, 1.0);
 		termMaps.put(term3, 1.0);
+		termMaps.put(term4, 1.5);
 		
-		Graph<KeyTerm, GoogleDistance> testGraph = this.testSubject.execute(null);
+		Graph<KeyTerm, TestEdge> testGraph = this.testSubject.execute(null);
 		
 		
-		
+		assertEquals("Should have right number of vertex",this.termMaps.size(),graph.getVertexCount());
 		assertNull(this.graph.findEdge(term1, term2));
-		assertEquals(1, testGraph.getEdgeCount());
+		assertEquals("the edge should be change to 0.4 instead of 0.5",0.4,this.edgeMaps.get(graph.findEdge(term1, term3)),0);
+		
+		assertNotNull("term 4 should connect to term1 instead of term2",this.graph.findEdge(term4, term1));
+		assertEquals(this.edgeMaps.size(), testGraph.getEdgeCount());
+		
 	}
 
 }

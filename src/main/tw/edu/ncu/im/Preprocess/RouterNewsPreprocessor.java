@@ -22,7 +22,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	HashSet<KeyTerm> terms;
-	HashSet<GoogleDistance> edges;
+	HashSet<TestEdge> edges;
 	HashMap<V,String> vertexContent = new HashMap<>();
 	public RouterNewsPreprocessor(Factory<V> _vertexFactory,Factory<E>_edgeFactory){
 		this.vertexFactory = _vertexFactory;
