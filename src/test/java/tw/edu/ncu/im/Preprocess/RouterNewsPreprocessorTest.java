@@ -21,7 +21,7 @@ import edu.uci.ics.jung.graph.Graph;
 
 public class RouterNewsPreprocessorTest {
 	
-	RouterNewsPreprocessor<KeyTerm,GoogleDistance> component ;
+	RouterNewsPreprocessor<KeyTerm,TestEdge> component ;
 	File origin;
 	Path tempFile;
 	@Before
@@ -42,11 +42,11 @@ public class RouterNewsPreprocessorTest {
 				return new KeyTerm();
 			}
 			
-		},new Factory<GoogleDistance>(){
+		},new Factory<TestEdge>(){
 
 			@Override
-			public GoogleDistance create() {
-				return new GoogleDistance(0);
+			public TestEdge create() {
+				return new TestEdge(0);
 			}
 			
 		});
@@ -59,7 +59,7 @@ public class RouterNewsPreprocessorTest {
 
 	@Test
 	public void testExecute() {
-		Graph<KeyTerm, GoogleDistance> g = this.component.execute(origin);
+		Graph<KeyTerm, TestEdge> g = this.component.execute(origin);
 		
 		assertNotNull("component should return something",g);
 		assertEquals("should have 2 line term", 2,g.getVertexCount());

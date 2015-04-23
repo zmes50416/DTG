@@ -16,10 +16,10 @@ import tw.edu.ncu.im.Preprocess.graph.*;
 import static org.easymock.EasyMock.*;
 public class PartOfSpeechFilterTest{
 
-	PreprocessComponent<Term, GoogleDistance> mockGraph;
-	Graph<Term, GoogleDistance> graph = new UndirectedSparseGraph<>();
+	PreprocessComponent<Term, TestEdge> mockGraph;
+	Graph<Term, TestEdge> graph = new UndirectedSparseGraph<>();
 	HashMap<Term,String> content = new HashMap<>();
-	PartOfSpeechFilter<Term, GoogleDistance> p;
+	PartOfSpeechFilter<Term, TestEdge> p;
 	@Before
 	public void setUp() throws Exception {
 		 mockGraph = createMock(PreprocessComponent.class);
@@ -32,10 +32,10 @@ public class PartOfSpeechFilterTest{
 			}
 			 
 		 }).anyTimes();
-		 expect(mockGraph.getEdgeFactory()).andReturn(new Factory<GoogleDistance>(){
+		 expect(mockGraph.getEdgeFactory()).andReturn(new Factory<TestEdge>(){
 
 			@Override
-			public GoogleDistance create() {
+			public TestEdge create() {
 				return null;
 			}
 			 

@@ -13,13 +13,13 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import static org.easymock.EasyMock.*;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
-import tw.edu.ncu.im.Preprocess.graph.GoogleDistance;
+import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 
 public class StemmingDecoratorTest {
-	StemmingDecorator<String,GoogleDistance> testSubject;
-	PreprocessComponent<String,GoogleDistance> comp;
+	StemmingDecorator<String,TestEdge> testSubject;
+	PreprocessComponent<String,TestEdge> comp;
 	HashMap<String,String> content;
-	private Graph<String,GoogleDistance> graph;
+	private Graph<String,TestEdge> graph;
 	@Before
 	public void setUp() throws Exception {
 		this.comp = createMock(PreprocessComponent.class);
@@ -31,15 +31,15 @@ public class StemmingDecoratorTest {
 			}
 			
 		}).anyTimes();
-		expect(comp.getEdgeFactory()).andReturn(new Factory<GoogleDistance>(){
+		expect(comp.getEdgeFactory()).andReturn(new Factory<TestEdge>(){
 
 			@Override
-			public GoogleDistance create() {
+			public TestEdge create() {
 				return null;
 			}
 			
 		}).anyTimes();
-		graph = new UndirectedSparseGraph<String,GoogleDistance>();
+		graph = new UndirectedSparseGraph<String,TestEdge>();
 		expect(comp.execute(null)).andReturn(graph);
 		replay(this.comp);
 		content = new HashMap<>();
