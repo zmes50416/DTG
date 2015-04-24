@@ -3,6 +3,9 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
@@ -18,10 +21,14 @@ public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E
 	public SearchResultFiltingDecorator(PreprocessComponent<V, E> _component,
 			HashMap<V, String> _vertexTerms, int LowerBound, int UpperBound,String serverURL) {
 		super(_component);
+		if(upperBound<lowerBound){
+			throw new IllegalArgumentException("UpperBound should not lower than lowerBound");
+		}
 		this.vertexTerms = _vertexTerms;
 		this.searcher = new IndexSearcher(serverURL);
 		this.upperBound = UpperBound;
 		this.lowerBound=LowerBound;
+		
 	}
 
 	@Override
@@ -42,15 +49,19 @@ public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E
 			}
 			termsSearchResult.put(term,SearchResult);
 		}
-		
+		Set<V> toRemoveVerteices = new HashSet<V>();
 		for(V term:terms){
-			String content = this.vertexTerms.get(term);
-			long TermsResult=termsSearchResult.get(content);
+			long TermsResult=termsSearchResult.get(term);
 			if (TermsResult>this.upperBound || TermsResult<this.lowerBound){
-				originGraph.removeVertex(term);
-				termsSearchResult.remove(term);
+				toRemoveVerteices.add(term);
 			}
 		}
+		
+		for(V term:toRemoveVerteices){
+			originGraph.removeVertex(term);
+			termsSearchResult.remove(term);
+		}
+		
 
 		return originGraph;
 	}
