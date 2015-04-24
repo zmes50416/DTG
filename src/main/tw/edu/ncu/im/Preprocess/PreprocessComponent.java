@@ -15,7 +15,6 @@ import edu.uci.ics.jung.graph.Graph;
  */
 public abstract class PreprocessComponent<V,E> {
 
-	protected Graph<V,E> documentGraph;
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
 	
@@ -25,11 +24,6 @@ public abstract class PreprocessComponent<V,E> {
 	public Factory<E> getEdgeFactory() {
 		return edgeFactory;
 	}
-	public Graph<V, E> getDocumentGraph() {
-		return documentGraph;
-	}
-	public void setDocumentGraph(Graph<V, E> documentGraph) {
-		this.documentGraph = documentGraph;
-	}
+
 	public abstract Graph<V,E> execute(File doc);
 }

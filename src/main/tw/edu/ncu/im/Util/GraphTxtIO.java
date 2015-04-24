@@ -1,4 +1,4 @@
-package tw.edu.ncu.im.Preprocess;
+package tw.edu.ncu.im.Util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.util.Collection;
 
 import edu.uci.ics.jung.graph.Graph;
-import tw.edu.ncu.im.Preprocess.graph.Edge;
-import tw.edu.ncu.im.Preprocess.graph.Node;
+import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 
-public class TXTDelegater extends IODelegater {
+public class GraphTxtIO<V,E> extends GraphIO<V,E> {
 	
 	File txtFile;
 	
-	public TXTDelegater(String _filePath) throws IOException {
+	public GraphTxtIO(String _filePath) throws IOException {
 		super(_filePath);
 		txtFile = new File(this.filePath.toString()+".txt");
 //		if(!txtFile.canWrite()&&!txtFile.canRead()){
@@ -24,14 +23,14 @@ public class TXTDelegater extends IODelegater {
 	}
 
 	@Override
-	public void store(PreprocessComponent<Node<?>, Edge> component) throws IOException {
+	public void store(Graph<V, E> component) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(txtFile));
-			Graph<Node<?>,Edge> g = component.getDocumentGraph();
-			Collection<Edge> edges = g.getEdges();
-			Collection<Node<?>> nodes = g.getVertices();
+			Graph<V,E> g = component;
+			Collection<E> edges = g.getEdges();
+			Collection<V> nodes = g.getVertices();
 			writer.write("Edge List::"+System.getProperty("line.separator"));
 			if(edges.size()!=0){
-				for(Edge e:edges){
+				for(E e:edges){
 					writer.write(e.toString()+System.getProperty("line.separator"));
 				}
 			}else{
@@ -39,15 +38,15 @@ public class TXTDelegater extends IODelegater {
 			}
 			writer.write("Node List::"+System.getProperty("line.separator"));
 			if(nodes.size()!= 0){
-				for(Node<?> e:nodes){
-					writer.write(e.toString()+System.getProperty("line.separator"));
+				for(V v:nodes){
+					writer.write(v.toString()+System.getProperty("line.separator"));
 				}
 			}
 		writer.close();
 	}
 
 	@Override
-	public void load(PreprocessComponent<Node<?>, Edge> component) {
+	public void load(Graph<V, E> component) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

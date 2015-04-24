@@ -48,7 +48,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 				
 		 
 		Graph<V,E> originGraph = this.originComponent.execute(doc);
-		this.documentGraph = new UndirectedSparseGraph<V,E>();
+		Graph<V,E> documentGraph = new UndirectedSparseGraph<V,E>();
 		Collection<V> terms = originGraph.getVertices();
 		HashMap<V,String> newVertexTerms = new HashMap<>();
 		List<String> pharses = new ArrayList<>();//all possible terms
@@ -63,11 +63,11 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 		for(String pharse:pharses){
 			V node = this.vertexFactory.create();
 			newVertexTerms.put(node, pharse);
-			this.documentGraph.addVertex(node);
+			documentGraph.addVertex(node);
 		}
 		this.vertexTerms = newVertexTerms;
 		
-		return this.documentGraph;
+		return documentGraph;
 	}
 	private List<String> tokenize(String line){
 		StringTokenizer st = new StringTokenizer(line);

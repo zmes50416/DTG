@@ -16,9 +16,10 @@ import org.junit.Test;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import tw.edu.ncu.im.Preprocess.graph.*;
+import tw.edu.ncu.im.Util.GraphTxtIO;
 
-public class TXTDelegaterTest {
-	TXTDelegater d;
+public class GraphTxtIOTest {
+	GraphTxtIO d;
 	static Path testDir;
 	Path testPath;
 	@BeforeClass
@@ -28,7 +29,7 @@ public class TXTDelegaterTest {
 	@Before
 	public void setUp() throws Exception {
 		this.testPath = testDir.resolve("test");
-		d = new TXTDelegater(testPath.toString());
+		d = new GraphTxtIO(testPath.toString());
 	}
 
 	@After
@@ -43,7 +44,7 @@ public class TXTDelegaterTest {
 	
 	@Test
 	public void testStore() {
-		PreprocessComponent<Node<?>,Edge> c = new MockComponent();
+		Graph<KeyTerm,TestEdge> c = new UndirectedSparseGraph<>();
 		try {
 			d.store(c);
 		} catch (IOException e) {

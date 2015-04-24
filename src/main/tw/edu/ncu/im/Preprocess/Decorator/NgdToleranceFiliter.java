@@ -33,10 +33,10 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 
 	@Override
 	public Graph<V, E> execute(File doc) {
-		this.documentGraph = this.originComponent.execute(doc);
+		Graph<V,E> documentGraph = this.originComponent.execute(doc);
 		Set<E> toleranceEdges = new HashSet<E>();
 		Set<E> removeEdges = new HashSet<E>();
-		for(Iterator<E> iterator = this.documentGraph.getEdges().iterator();iterator.hasNext();){
+		for(Iterator<E> iterator = documentGraph.getEdges().iterator();iterator.hasNext();){
 			E edge = iterator.next();
 			Double ngdScore = this.edgeDistanceMap.get(edge);
 			if(ngdScore <= this.toleranceThreshold){
@@ -46,7 +46,7 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 		}
 		
 		for(E edge:toleranceEdges){
-			Pair<V> pair = this.documentGraph.getEndpoints(edge);
+			Pair<V> pair = documentGraph.getEndpoints(edge);
 			double first = this.termWeightMap.get(pair.getFirst());
 			double second = this.termWeightMap.get(pair.getSecond());
 			V strongNode, weakNode;
@@ -57,15 +57,15 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 				strongNode = pair.getSecond();
 				weakNode = pair.getFirst();
 			}
-			for(V node:this.documentGraph.getNeighbors(weakNode)){
-				E neighborEdge = this.documentGraph.findEdge(weakNode, node);
-				Pair<V> nPair = this.documentGraph.getEndpoints(neighborEdge);
+			for(V node:documentGraph.getNeighbors(weakNode)){
+				E neighborEdge = documentGraph.findEdge(weakNode, node);
+				Pair<V> nPair = documentGraph.getEndpoints(neighborEdge);
 				Double neighborValue = this.edgeDistanceMap.get(neighborEdge);
 
 				if(node.equals(strongNode)){
 					removeEdges.add(edge);
-				}else if(this.documentGraph.isNeighbor(node, strongNode)){//三者連通的情況 
-					E anotherEdge = this.documentGraph.findEdge(strongNode, node);
+				}else if(documentGraph.isNeighbor(node, strongNode)){//三者連通的情況 
+					E anotherEdge = documentGraph.findEdge(strongNode, node);
 					if(edgeDistanceMap.get(anotherEdge)>=edgeDistanceMap.get(neighborEdge)){
 						this.edgeDistanceMap.put(anotherEdge, neighborValue);
 					}
@@ -74,24 +74,24 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 					
 					Pair<V> anotherPair = new Pair<V>(strongNode,node);
 					E newEdge = this.edgeFactory.create();
-					this.documentGraph.addEdge(newEdge, anotherPair);
+					documentGraph.addEdge(newEdge, anotherPair);
 					removeEdges.add(neighborEdge);//Old one should be deleted
 					this.edgeDistanceMap.put(newEdge, neighborValue);
 				}//end of if else
 				
 			}
-			this.documentGraph.removeVertex(weakNode);
+			documentGraph.removeVertex(weakNode);
 			this.termWeightMap.remove(weakNode);
 			
 		}//for loop of edgeToRemove
 		
 		for(E edge:removeEdges){
-			this.documentGraph.removeEdge(edge);
+			documentGraph.removeEdge(edge);
 			this.edgeDistanceMap.remove(edge);
 		}
 		
 		
-		return this.documentGraph;
+		return documentGraph;
 	}
 	
 

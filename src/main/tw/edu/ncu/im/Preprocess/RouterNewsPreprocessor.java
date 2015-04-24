@@ -30,11 +30,12 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	}
 	@Override
 	public Graph<V,E> execute(File doc) {
+		Graph<V,E> documentGraph = null;
 		if(!doc.isFile()){
 			//TODO 判斷是否為可讀寫且為txt 否則throw Exception
 		}
 		try(BufferedReader r = new BufferedReader(new FileReader(doc));){
-			this.documentGraph = new UndirectedSparseGraph<V,E>();
+			documentGraph = new UndirectedSparseGraph<V,E>();
 			for(String line=r.readLine();line!=null;line = r.readLine()){
 				line=line.replace("]", "");
 				line=line.replace("[", "");
@@ -45,13 +46,13 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 		        line = m.replaceAll("");
 				V node = this.vertexFactory.create();
 				this.vertexContent.put(node, line);
-				this.documentGraph.addVertex(node);
+				documentGraph.addVertex(node);
 				
 			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return this.documentGraph;
+		return documentGraph;
 		
 	}
 	
