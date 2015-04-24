@@ -41,7 +41,7 @@ public abstract class DUCPreprocessor<V,E> extends PreprocessComponent<V, E> {
 				
 				/*Matcher m = Pattern.compile("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]").matcher(line);
 				line = m.replaceAll("");*/
-				String[] tokens = line.split(",.");
+				String[] tokens = line.split(",");
 				 for(String token:tokens) {
 					V node = this.vertexFactory.create();
 					this.vertexContent.put(node, token);
