@@ -45,6 +45,13 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/Qtag.jar</systemPath>
 		</dependency>
+		<!-- FOR SOLR DEPENDENCY -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+
 
 	</dependencies>
 	<organization>
