@@ -18,7 +18,7 @@ public class IndexSearcher {
 	// Singleton Design pattern only access it by getServer() to ensure connection
 	private static HttpSolrClient service=null; 
 	protected String ip;
-	IndexSearcher(String _ip){
+	public IndexSearcher(String _ip){
 		this.ip = _ip;
 	}
 	/**
