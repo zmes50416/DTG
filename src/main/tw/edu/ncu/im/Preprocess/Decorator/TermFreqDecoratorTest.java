@@ -55,18 +55,25 @@ public class TermFreqDecoratorTest {
 		KeyTerm term1 = new KeyTerm();
 		KeyTerm term2 = new KeyTerm();
 		KeyTerm term3 = new KeyTerm();
+		KeyTerm term4 = new KeyTerm();
+		KeyTerm term5 = new KeyTerm();
 		this.nodeContent.put(term1, "Apple");
 		this.nodeContent.put(term2, "Bpple");
 		this.nodeContent.put(term3, "Cpple");
+		this.nodeContent.put(term4, "Cpple");
+		this.nodeContent.put(term5, "Apple");
 		this.nodeContentValues.put(term1, 0.0);
 		this.nodeContentValues.put(term2, 0.0);
-		this.nodeContentValues.put(term3, 1.0);
+		//this.nodeContentValues.put(term3, 1.0);
+		//this.nodeContentValues.put(term4, 0.0);
 		graph.addVertex(term1);
 		graph.addVertex(term2);
 		graph.addVertex(term3);
+		graph.addVertex(term4);
+		graph.addVertex(term5);
 		testSubject.execute(null);
 		
-		assertEquals("Should only one node left",1.0,this.nodeContentValues.get(term2),0);
+		assertEquals("Should only one node left",3,graph.getVertexCount());
 		
 	}
 
