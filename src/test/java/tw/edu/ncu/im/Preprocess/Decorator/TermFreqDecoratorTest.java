@@ -6,21 +6,23 @@ import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections15.Factory;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
-public class TermToLowerCaseDecoratorTest{
-	TermToLowerCaseDecorator<KeyTerm, TestEdge> testSubject;
+public class TermFreqDecoratorTest {
+	TermFreqDecorator<KeyTerm, TestEdge> testSubject;
 	Graph<KeyTerm, TestEdge> graph;
 	HashMap<KeyTerm, String> nodeContent;
+	HashMap<KeyTerm, Double> nodeContentValues;
 	@Before
 	public void setUp() throws Exception {
 		graph = new UndirectedSparseGraph<>();
@@ -45,21 +47,43 @@ public class TermToLowerCaseDecoratorTest{
 		expect(mockComp.execute(null)).andReturn(graph);
 		replay(mockComp);
 		this.nodeContent = new HashMap<>();
-		testSubject = new TermToLowerCaseDecorator<>(mockComp, nodeContent);
+		this.nodeContentValues = new HashMap<>();
+		testSubject = new TermFreqDecorator<>(mockComp, nodeContent,nodeContentValues);
 	}
 
 	@Test
 	public void test() {
 		KeyTerm term1 = new KeyTerm();
-		//KeyTerm term2 = new KeyTerm();
-		
+		KeyTerm term2 = new KeyTerm();
+		KeyTerm term3 = new KeyTerm();
+		KeyTerm term4 = new KeyTerm();
+		KeyTerm term5 = new KeyTerm();
 		this.nodeContent.put(term1, "Apple");
-		//this.nodeContent.put(term2, "Bpple");
+		this.nodeContent.put(term2, "Bpple");
+		this.nodeContent.put(term3, "Cpple");
+		this.nodeContent.put(term4, "Cpple");
+		this.nodeContent.put(term5, "Apple");
+		this.nodeContentValues.put(term1, 0.0);
+		this.nodeContentValues.put(term2, 0.0);
+		//this.nodeContentValues.put(term3, 1.0);
+		//this.nodeContentValues.put(term4, 0.0);
 		graph.addVertex(term1);
-		//graph.addVertex(term2);
+		graph.addVertex(term2);
+		graph.addVertex(term3);
+		graph.addVertex(term4);
+		graph.addVertex(term5);
 		testSubject.execute(null);
+		KeyTerm testKey = null;
+		for(  Entry<KeyTerm, String> node:this.nodeContent.entrySet()){
+			if(node.getValue().equals("Apple")){
+				testKey = node.getKey();
+			}
+		}
 		
-		assertEquals("Should only one node left","apple",this.nodeContent.get(term1));
+		
+		assertEquals("Should only one node left",3,graph.getVertexCount());
+		assertEquals("Apple should have 2 TF",2,this.nodeContentValues.get(testKey),0);
+		
 	}
 
 }

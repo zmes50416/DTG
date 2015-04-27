@@ -25,12 +25,12 @@ public abstract class DUCPreprocessor<V,E> extends PreprocessComponent<V, E> {
 	}
 	
 	public Graph<V,E> execute(File doc){
+		Graph<V,E> documentGraph = new UndirectedSparseGraph<V,E>();
 		if(!doc.isFile()){
 			//TODO 判斷是否為可讀寫且為txt 否則throw Exception 
 			//還沒寫
 		}
 		try(BufferedReader r = new BufferedReader(new FileReader(doc));){
-			this.documentGraph = new UndirectedSparseGraph<V,E>();
 			for(String line = r.readLine();line!=null;line = r.readLine()){
 				
 				line = line.replace("]", "");
@@ -45,7 +45,7 @@ public abstract class DUCPreprocessor<V,E> extends PreprocessComponent<V, E> {
 				 for(String token:tokens) {
 					V node = this.vertexFactory.create();
 					this.vertexContent.put(node, token);
-					this.documentGraph.addVertex(node);
+					documentGraph.addVertex(node);
 				 }
 				
 				
@@ -54,32 +54,7 @@ public abstract class DUCPreprocessor<V,E> extends PreprocessComponent<V, E> {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return this.documentGraph;
+		return documentGraph;
 	}
 	
-		
-		// 打開要做詞性標記的目錄 (開始)
-		/*File[] DirectoryList = io.openDirectory(folderRoot + folderIn);
-		for (File Directory : DirectoryList) {
-			File[] fileList = io.openDirectory(Directory.getPath());
-			List<String> inputText = new ArrayList<String>(); // 存放input
-			for (File file : fileList) {
-				System.out.println("處理檔案: " + file.getName());
-				List<String> inputTextTemp = new ArrayList<String>(); // 存放input
-				inputTextTemp = io.openFile(file.getPath()); // 打開子目錄內的檔案
-				inputText.addAll(inputTextTemp);
-			} // end of for 子目錄內的檔案
-			HashSet<String> filteredTerm = new HashSet<String>(); // 存放經過過濾後的候選term
-			filteredTerm = POS_and_Length_Filter(inputText);
-			List<String> outputText = new ArrayList<String>(); // 存放output
-			for (String term : filteredTerm) {
-				outputText.add(term);
-				System.out.println(term);
-			} // end of for 將term放入outputText準備輸出
-			io.saveFile(folderRoot + folderOut
-					+ Directory.getName().toUpperCase() + ".txt", outputText);
-		} // end of for 目錄內的子目錄*/
-		
-	
-
 }
