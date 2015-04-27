@@ -22,7 +22,6 @@ public class TermFreqDecoratorTest {
 	TermFreqDecorator<KeyTerm, TestEdge> testSubject;
 	Graph<KeyTerm, TestEdge> graph;
 	HashMap<KeyTerm, String> nodeContent;
-	HashMap<KeyTerm, Double> nodeContentValues;
 	@Before
 	public void setUp() throws Exception {
 		graph = new UndirectedSparseGraph<>();
@@ -47,8 +46,7 @@ public class TermFreqDecoratorTest {
 		expect(mockComp.execute(null)).andReturn(graph);
 		replay(mockComp);
 		this.nodeContent = new HashMap<>();
-		this.nodeContentValues = new HashMap<>();
-		testSubject = new TermFreqDecorator<>(mockComp, nodeContent,nodeContentValues);
+		testSubject = new TermFreqDecorator<>(mockComp, nodeContent);
 	}
 
 	@Test
@@ -63,26 +61,24 @@ public class TermFreqDecoratorTest {
 		this.nodeContent.put(term3, "Cpple");
 		this.nodeContent.put(term4, "Cpple");
 		this.nodeContent.put(term5, "Apple");
-		this.nodeContentValues.put(term1, 0.0);
-		this.nodeContentValues.put(term2, 0.0);
-		//this.nodeContentValues.put(term3, 1.0);
-		//this.nodeContentValues.put(term4, 0.0);
 		graph.addVertex(term1);
 		graph.addVertex(term2);
 		graph.addVertex(term3);
 		graph.addVertex(term4);
 		graph.addVertex(term5);
 		testSubject.execute(null);
-		KeyTerm testKey = null;
-		for(  Entry<KeyTerm, String> node:this.nodeContent.entrySet()){
+		double tf = 0;
+		HashMap<KeyTerm, Double> termMap = testSubject.getTermFreqMap();
+
+		for(Entry<KeyTerm, String> node:this.nodeContent.entrySet()){
 			if(node.getValue().equals("Apple")){
-				testKey = node.getKey();
+				tf = termMap.get(node.getKey());
 			}
 		}
 		
 		
 		assertEquals("Should only one node left",3,graph.getVertexCount());
-		assertEquals("Apple should have 2 TF",2,this.nodeContentValues.get(testKey),0);
+		assertEquals("Apple should have 2 TF",2,tf,0);
 		
 	}
 
