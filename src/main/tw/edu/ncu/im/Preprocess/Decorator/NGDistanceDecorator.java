@@ -23,7 +23,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
 	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
 	HashMap<E, Double> edgeDistance = new HashMap<E, Double>();
-	Factory<E> edgeFactory;
+	//Factory<E> edgeFactory;
 	IndexSearcher searcher;
 
 	/**
@@ -42,7 +42,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 		this.vertexTerms = _vertexTerms;
 		this.searcher = new IndexSearcher(serverURL);
 		this.termsSearchResult = termsSearchResult;
-		edgeFactory = getEdgeFactory();
+		//edgeFactory = getEdgeFactory();
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 					double NGDistance = NGD_calculate.NGD_cal(
 							term1SearchResult, term2SearchResult,
 							term1term2Result);
-					E edge = edgeFactory.create();
+					E edge = this.edgeFactory.create();
 					edgeDistance.put(edge, NGDistance);
 					originGraph.addEdge(edge, term1, term2);
 				}
