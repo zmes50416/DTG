@@ -53,7 +53,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 		for (V term1 : terms) {
 			for (V term2 : terms) {
 				if (!term1.equals(term2)
-						&& originGraph.findEdge(term1, term2) != null) {
+						&& originGraph.findEdge(term1, term2) == null) {
 					String term1Content = this.vertexTerms.get(term1);
 					long term1SearchResult = this.termsSearchResult.get(term1);
 					String term2Content = this.vertexTerms.get(term2);
