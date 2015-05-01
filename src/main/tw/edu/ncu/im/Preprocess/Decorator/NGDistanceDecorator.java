@@ -63,7 +63,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 		/**
 		 * 若termsSearchResult 為空 則先行計算
 		 */
-		if (this.termsSearchResult == null) {
+		if (this.termsSearchResult.isEmpty() ) {
 			for (V term : terms) {
 				long SearchResult = 0;
 				try {

@@ -54,8 +54,10 @@ public class NGDistanceDecoratorTest {
 		replay(mockComponent);
 		termContent = new HashMap<>();
 		termSearchResult = new HashMap<>();
+		/*testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
+				termSearchResult, "http://TEST");*/
 		testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
-				termSearchResult, "http://TEST");
+			 "http://TEST");
 		mockSearcher = createMock(IndexSearcher.class);
 	}
 
@@ -63,7 +65,9 @@ public class NGDistanceDecoratorTest {
 	public void testExecute() throws SolrServerException {
 		testSubject.searcher = mockSearcher;
 		expect(mockSearcher.searchTermSize(notNull(String.class)))
-				.andReturn((long) 1000).andReturn((long) 100).andReturn((long) 20);
+				.andReturn((long) 1000).andReturn((long) 100)
+				.andReturn((long) 20).andReturn((long) 800).andReturn((long) 900)
+				.andReturn((long) 2000);
 		replay(mockSearcher);
 		KeyTerm term1 = new KeyTerm();
 		KeyTerm term2 = new KeyTerm();
@@ -71,13 +75,15 @@ public class NGDistanceDecoratorTest {
 		this.termContent.put(term1, "apple");
 		this.termContent.put(term2, "banana");
 		this.termContent.put(term3, "orange");
-		this.termSearchResult.put(term1,(long)2000);
-		this.termSearchResult.put(term2,(long)6000);
-		this.termSearchResult.put(term3,(long)12000);		
+		/*
+		 * this.termSearchResult.put(term1,(long)2000);
+		 * this.termSearchResult.put(term2,(long)6000);
+		 * this.termSearchResult.put(term3,(long)12000);
+		 */
 		this.graph.addVertex(term1);
 		this.graph.addVertex(term2);
 		this.graph.addVertex(term3);
-		
+
 		assertEquals(3, this.testSubject.execute(null).getEdgeCount());
 	}
 }
