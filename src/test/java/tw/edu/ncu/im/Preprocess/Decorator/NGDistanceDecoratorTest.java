@@ -77,7 +77,7 @@ public class NGDistanceDecoratorTest {
 		this.graph.addVertex(term1);
 		this.graph.addVertex(term2);
 		this.graph.addVertex(term3);
-
+		
 		assertEquals(3, this.testSubject.execute(null).getEdgeCount());
 	}
 }

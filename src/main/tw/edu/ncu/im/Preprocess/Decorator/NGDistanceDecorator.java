@@ -23,32 +23,62 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
 	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
 	HashMap<E, Double> edgeDistance = new HashMap<E, Double>();
-	//Factory<E> edgeFactory;
 	IndexSearcher searcher;
 
 	/**
+	 * 若無提供term搜尋結果數的hashmap 則用以下建構子
 	 * 
 	 * @param _component
 	 * @param _vertexTerms
+	 *            存放node與term的string
 	 * @param termsSearchResult
 	 *            term和對應的搜尋結果數
 	 * @param serverURL
 	 *            要進行連線搜尋的SolrURL
 	 */
 	public NGDistanceDecorator(PreprocessComponent<V, E> _component,
-			HashMap<V, String> _vertexTerms,
-			HashMap<V, Long> termsSearchResult, String serverURL) {
+			HashMap<V, String> _vertexTerms, String serverURL) {
 		super(_component);
 		this.vertexTerms = _vertexTerms;
 		this.searcher = new IndexSearcher(serverURL);
-		this.termsSearchResult = termsSearchResult;
-		//edgeFactory = getEdgeFactory();
 	}
+
+	/**
+	 * 若有提供term搜尋結果數的hashmap 則用以下建構子
+	 */
+	public NGDistanceDecorator(PreprocessComponent<V, E> _component,
+			HashMap<V, String> _vertexTerms,
+			HashMap<V, Long> termsSearchResult, String serverURL) {
+		this( _component, _vertexTerms,  serverURL);
+		this.termsSearchResult = termsSearchResult;
+	}
+
+
+
 
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> originGraph = this.originComponent.execute(doc);
 		Collection<V> terms = originGraph.getVertices();
+		/**
+		 * 若termsSearchResult 為空 則先行計算
+		 */
+		if (this.termsSearchResult == null) {
+			for (V term : terms) {
+				long SearchResult = 0;
+				try {
+					SearchResult = this.searcher.searchTermSize(vertexTerms.get(term));
+				} catch (SolrServerException e) {// Retry
+					try {
+						SearchResult = this.searcher.searchTermSize(vertexTerms.get(term));
+					} catch (SolrServerException e1) {
+						e1.printStackTrace();
+					}
+				}
+				this.termsSearchResult.put(term, SearchResult);
+			}
+		}
+
 		long term1term2Result = 0;
 		for (V term1 : terms) {
 			for (V term2 : terms) {
