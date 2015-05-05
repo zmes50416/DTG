@@ -1,5 +1,6 @@
 package tw.edu.ncu.im.Util;
 
+import java.awt.datatransfer.StringSelection;
 import java.net.MalformedURLException;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -38,11 +39,26 @@ public class IndexSearcher {
 	 * @throws SolrServerException happen when server have connection problem
 	 */
 	public long searchTermSize(String term) throws SolrServerException{
+		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
 		query.setQuery(term);
 		QueryResponse rsp = getService(this.ip).query(query);
 		SolrDocumentList docs = rsp.getResults();
 		return docs.getNumFound();
+	}
+	
+	public long searchMultipleTerm(String[] terms) throws SolrServerException{
+		if(terms.length == 1){
+			return searchTermSize(terms[0]);
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		
+		for(String term:terms){
+				builder.append("+\"" +term+ "\"");
+		}
+		return searchTermSize(builder.toString());
+		
 	}
 	
 	

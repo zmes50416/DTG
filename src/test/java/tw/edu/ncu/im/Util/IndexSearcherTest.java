@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,17 +18,39 @@ public class IndexSearcherTest {
 	}
 
 	@Test
-	public void test() {
-		HttpSolrClient service = IndexSearcher.getService(searcher.ip);
-		long num =1000;
+	public void testSingleTermSearch() {
 		try {
-			num = this.searcher.searchTermSize("Apple");
+			HttpSolrClient service = IndexSearcher.getService(searcher.ip);
+			long num = this.searcher.searchTermSize("Apple");
+			System.out.println(num);
+			
+			assertThat(num,not(equalTo((long)0)));
+			assertNotNull(service);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.print(num);
-		assertNotNull(service);
+
+	}
+	@Test
+	public void testMultiTermsCombinedSearch(){
+		try {
+			HttpSolrClient service = IndexSearcher.getService(searcher.ip);
+			String multiTerm[] = {
+				"Apple","Google","Samsung","Yahoo"	
+			};
+			long num = this.searcher.searchMultipleTerm(multiTerm);
+			System.out.println(num);
+			
+			assertThat(num,not(equalTo((long)0)));
+			assertNotNull(service);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
 	}
 
 }
