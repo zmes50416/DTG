@@ -1,14 +1,17 @@
 package tw.edu.ncu.im.Util;
 
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.net.MalformedURLException;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.core.CoreContainer;
 /**
  * Searching the keyterm number appear in the index
  * using Wikipedia index and Solr server as the example 
@@ -17,17 +20,22 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class IndexSearcher {
 	// Singleton Design pattern only access it by getServer() to ensure connection
-	private static HttpSolrClient service=null; 
-	protected String ip;
-	public IndexSearcher(String _ip){
-		this.ip = _ip;
+	private static SolrServer service = getService(); 
+	private static String SOLRHOMEPATH = "/Users/Dean/Documents/solr-4.9.0/example/solr";
+	public IndexSearcher(){
 	}
 	/**
 	 * @return the service
 	 */
-	public static HttpSolrClient getService(String url) {
+	public static SolrServer getService() {
 		if(service == null){
-			service  = new HttpSolrClient(url);
+			File home = new File(SOLRHOMEPATH);
+			File f = new File(home, "solr.xml");
+			CoreContainer container = new CoreContainer(SOLRHOMEPATH);
+			container.load();
+			System.out.println(container.getSolrHome());
+			service  = new EmbeddedSolrServer(container, "collection1");
+			
 		}
 		return service;
 	}
@@ -42,7 +50,7 @@ public class IndexSearcher {
 		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
 		query.setQuery(term);
-		QueryResponse rsp = getService(this.ip).query(query);
+		QueryResponse rsp = getService().query(query);
 		SolrDocumentList docs = rsp.getResults();
 		return docs.getNumFound();
 	}
