@@ -4,6 +4,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.net.MalformedURLException;
 
+import org.apache.commons.lang.Validate;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -19,23 +20,43 @@ import org.apache.solr.core.CoreContainer;
  *
  */
 public class IndexSearcher {
-	// Singleton Design pattern only access it by getServer() to ensure connection
-	private static SolrServer service = getService(); 
-	private static String SOLRHOMEPATH = "/Users/Dean/Documents/solr-4.9.0/example/solr";
+	// Singleton Design pattern only access it by getService() to ensure connection
+	public static String SolrHomePath;
+	public static String solrCoreName;
+	public static final String DEFAULTHOMEPATH = "C:\\SOLRServer\\solr"; //DEFAULT solr place, not likely in this place
+	public static final String DEFAULTCORENAME = "collection1";
+	private static volatile SolrServer service; 
+	
 	public IndexSearcher(){
+	}
+	/**
+	 * Initialize Server setup
+	 * @return server 
+	 */
+	private static SolrServer initService(){
+		if(SolrHomePath==null){
+			throw new IllegalStateException("Please set the home path of Solr Location");
+		}
+		if(solrCoreName==null){
+			throw new IllegalStateException("Please set the solr core name");
+		}
+		CoreContainer container = new CoreContainer(SolrHomePath);
+		container.load();
+		System.out.println(container.getCoreNames());
+		EmbeddedSolrServer embeddedService  = new EmbeddedSolrServer(container, solrCoreName);
+		System.out.println("Solr System conntected!");
+		return embeddedService;
 	}
 	/**
 	 * @return the service
 	 */
 	public static SolrServer getService() {
-		if(service == null){
-			File home = new File(SOLRHOMEPATH);
-			File f = new File(home, "solr.xml");
-			CoreContainer container = new CoreContainer(SOLRHOMEPATH);
-			container.load();
-			System.out.println(container.getSolrHome());
-			service  = new EmbeddedSolrServer(container, "collection1");
-			
+		if(service==null){//Only enter this once in a runtime
+			synchronized(IndexSearcher.class){
+				if(service==null){//Have to check again or have chance to fail
+				service = initService();
+				}
+			}
 		}
 		return service;
 	}
@@ -50,6 +71,7 @@ public class IndexSearcher {
 		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
 		query.setQuery(term);
+		query.setHighlight(false);
 		QueryResponse rsp = getService().query(query);
 		SolrDocumentList docs = rsp.getResults();
 		return docs.getNumFound();

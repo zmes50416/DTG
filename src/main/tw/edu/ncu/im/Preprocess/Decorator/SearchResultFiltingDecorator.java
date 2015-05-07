@@ -25,7 +25,7 @@ public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E
 			throw new IllegalArgumentException("UpperBound should not lower than lowerBound");
 		}
 		this.vertexTerms = _vertexTerms;
-		this.searcher = new IndexSearcher(serverURL);
+		this.searcher = new IndexSearcher();
 		this.upperBound = UpperBound;
 		this.lowerBound=LowerBound;
 		

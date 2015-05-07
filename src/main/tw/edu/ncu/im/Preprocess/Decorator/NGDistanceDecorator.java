@@ -40,7 +40,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 			HashMap<V, String> _vertexTerms, String serverURL) {
 		super(_component);
 		this.vertexTerms = _vertexTerms;
-		this.searcher = new IndexSearcher(serverURL);
+		this.searcher = new IndexSearcher();
 	}
 
 	/**
