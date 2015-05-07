@@ -1,6 +1,7 @@
 package tw.edu.ncu.im.Preprocess.Decorator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +24,13 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 	double toleranceThreshold;
 	HashMap<E,Double> edgeDistanceMap;
 	HashMap<V,Double> termWeightMap;
-	
+	/**
+	 * 
+	 * @param _component
+	 * @param _tolThreshold 過濾的邊距離長度,應該在0~1之間 
+	 * @param _edgeDistance 邊的NGD距離
+	 * @param _termWeightMap 節點的TF權重
+	 */
 	public NgdToleranceFiliter(PreprocessComponent<V, E> _component,double _tolThreshold, HashMap<E, Double> _edgeDistance,HashMap<V, Double> _termWeightMap) {
 		super(_component);
 		this.toleranceThreshold = _tolThreshold;
@@ -40,7 +47,7 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 			E edge = iterator.next();
 			Double ngdScore = this.edgeDistanceMap.get(edge);
 			if(ngdScore <= this.toleranceThreshold){
-				this.edgeDistanceMap.remove(edge);
+				removeEdges.add(edge);
 				toleranceEdges.add(edge);
 			}
 		}
@@ -80,7 +87,10 @@ public class NgdToleranceFiliter<V,E> extends PreprocessDecorator<V, E> {
 				}//end of if else
 				
 			}
+			double strongWeight = this.termWeightMap.get(strongNode);
+			double weakWeight = this.termWeightMap.get(weakNode);
 			documentGraph.removeVertex(weakNode);
+			this.termWeightMap.put(strongNode, strongWeight+weakWeight);//Merge Weight
 			this.termWeightMap.remove(weakNode);
 			
 		}//for loop of edgeToRemove

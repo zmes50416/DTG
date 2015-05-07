@@ -50,7 +50,7 @@ public class NgdToleranceFiliterTest{
 		
 
 		
-		this.testSubject = new NgdToleranceFiliter<>(mockComp,0.1,edgeMaps,termMaps);
+		this.testSubject = new NgdToleranceFiliter<>(mockComp,0.4,edgeMaps,termMaps);
 
 	}
 
@@ -86,8 +86,8 @@ public class NgdToleranceFiliterTest{
 		
 		assertEquals("Should have right number of vertex",this.termMaps.size(),graph.getVertexCount());
 		assertNull(this.graph.findEdge(term1, term2));
-		assertEquals("the edge should be change to 0.4 instead of 0.5",0.4,this.edgeMaps.get(graph.findEdge(term1, term3)),0);
-		
+		assertEquals("the edge should be change to 0.4 instead of 0.5",0.8,this.edgeMaps.get(graph.findEdge(term1, term4)),0);
+		assertEquals("the vertex tf should be merged",5,this.termMaps.get(term1),0);
 		assertNotNull("term 4 should connect to term1 instead of term2",this.graph.findEdge(term4, term1));
 		assertEquals(this.edgeMaps.size(), testGraph.getEdgeCount());
 		
