@@ -17,17 +17,21 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class IndexSearcher {
 	// Singleton Design pattern only access it by getServer() to ensure connection
-	private static HttpSolrClient service=null; 
+	private volatile static HttpSolrClient service; 
 	protected String ip;
-	public IndexSearcher(String _ip){
-		this.ip = _ip;
+	public IndexSearcher(){
 	}
 	/**
 	 * @return the service
 	 */
 	public static HttpSolrClient getService(String url) {
 		if(service == null){
-			service  = new HttpSolrClient(url);
+			synchronized(IndexSearcher.class){
+				if(service==null){
+				service  = new HttpSolrClient("http://localhost/searchweb/");
+				}
+			}
+			
 		}
 		return service;
 	}
