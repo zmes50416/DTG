@@ -13,7 +13,7 @@ import org.apache.solr.core.CoreContainer;
  * @author Dean
  *
  */
-public class EmbeddedIndexSearcher {
+public class EmbeddedIndexSearcher implements IndexSearchable {
 	// Singleton Design pattern only access it by getService() to ensure connection
 	public static String SolrHomePath;
 	public static String solrCoreName;
@@ -21,7 +21,7 @@ public class EmbeddedIndexSearcher {
 	public static final String DEFAULTCORENAME = "collection1";
 	private static volatile SolrServer service; 
 	
-	private EmbeddedIndexSearcher(){
+	public EmbeddedIndexSearcher(){
 	}
 	
 	/**
@@ -56,13 +56,8 @@ public class EmbeddedIndexSearcher {
 		return service;
 	}
 	
-	/**
-	 * searching the Server to get how many document the term contain
-	 * @param term searching term
-	 * @return number of appear in indexed documents 
-	 * @throws SolrServerException happen when server have connection problem
-	 */
-	public static long searchTermSize(String term) throws SolrServerException{
+
+	public long searchTermSize(String term) throws SolrServerException{
 		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
 		query.setQuery(term);
@@ -71,13 +66,8 @@ public class EmbeddedIndexSearcher {
 		SolrDocumentList docs = rsp.getResults();
 		return docs.getNumFound();
 	}
-	/**
-	 * Search Multiple term's document
-	 * @param terms
-	 * @return
-	 * @throws SolrServerException
-	 */
-	public static long searchMultipleTerm(String[] terms) throws SolrServerException{
+
+	public long searchMultipleTerm(String[] terms) throws SolrServerException{
 		if(terms.length == 1){
 			return searchTermSize(terms[0]);
 		}
