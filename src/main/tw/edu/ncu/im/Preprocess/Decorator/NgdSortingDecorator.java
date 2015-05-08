@@ -23,8 +23,15 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 public class NgdSortingDecorator<V, E> extends PreprocessDecorator<V, E> {
 
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
-	HashMap<E, Double> Ngd = new HashMap<E, Double>();
-	List<Entry<E, Double>> NgdList;
+	HashMap<E, Double> ngdMap = new HashMap<E, Double>();
+	List<Entry<E, Double>> ngdList = new ArrayList<Entry<E, Double>>();
+	/**
+	 * list getter
+	 * @return
+	 */
+	public List<Entry<E, Double>> getNgdList(){
+		return ngdList;
+	}
 
 	/**
 	 * 
@@ -38,22 +45,26 @@ public class NgdSortingDecorator<V, E> extends PreprocessDecorator<V, E> {
 			HashMap<V, String> _vertexTerms, HashMap<E, Double> _edgeDistance) {
 		super(_component);
 		this.vertexTerms = _vertexTerms;
-		this.Ngd = _edgeDistance;
+		this.ngdMap = _edgeDistance;
 		/**
 		 * HashMap轉為Arraylist做排序，自定義排序法
 		 */
-		NgdList = new ArrayList<Entry<E, Double>>(this.Ngd.entrySet());
-		Collections.sort(NgdList, new Comparator<Map.Entry<E, Double>>() {
+	}
+	
+	public List<Entry<E, Double>> sortingList(HashMap<E, Double> unsortingMap){
+		List<Entry<E, Double>> sortingList = new ArrayList<Entry<E, Double>>(unsortingMap.entrySet());
+		Collections.sort(sortingList, new Comparator<Map.Entry<E, Double>>() {
 			public int compare(Map.Entry<E, Double> entry1,
 					Map.Entry<E, Double> entry2) {
-				return (int) ( entry2.getValue() - entry1.getValue());
+				return entry2.getValue().compareTo(entry1.getValue());
 			}
 		});
+		return sortingList;
 	}
-
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> originGraph = this.originComponent.execute(doc);
+		this.ngdList=sortingList(this.ngdMap);
 		return originGraph;
 	}
 

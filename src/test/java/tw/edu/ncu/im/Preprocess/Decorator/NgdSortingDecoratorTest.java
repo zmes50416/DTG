@@ -86,12 +86,14 @@ public class NgdSortingDecoratorTest {
 		this.graph.addEdge(edge2, term1, term3);
 		this.graph.addEdge(edge3, term3, term2);
 
+		this.testSubject.execute(null);
+		
 		assertEquals(3, this.testSubject.vertexTerms.size());
-		assertEquals(3, this.testSubject.Ngd.size());
-		assertEquals(3, this.testSubject.NgdList.size());
-		assertEquals(0.6, this.testSubject.NgdList.get(0));
-		assertEquals(0.5, this.testSubject.NgdList.get(1));
-		assertEquals(0.4, this.testSubject.NgdList.get(2));
+		assertEquals(3, this.testSubject.ngdMap.size());
+		assertEquals(3, this.testSubject.getNgdList().size());
+		assertEquals("0.6", this.testSubject.ngdList.get(0).getValue().toString());
+		assertEquals("0.5", this.testSubject.ngdList.get(1).getValue().toString());
+		assertEquals("0.4", this.testSubject.ngdList.get(2).getValue().toString());
 	}
 
 }

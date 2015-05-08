@@ -101,15 +101,26 @@ public class NgdFilterTest {
 		Collections.sort(this.distanceList, new Comparator<Map.Entry<TestEdge, Double>>() {
 			public int compare(Map.Entry<TestEdge, Double> entry1,
 					Map.Entry<TestEdge, Double> entry2) {
-				return (int) ( entry2.getValue() - entry1.getValue());
+				return entry2.getValue().compareTo(entry1.getValue());
 			}
 		});
 		
+		this.testSubject.execute(null);
+		
 		assertEquals(this.termContent.size(),graph.getVertexCount());
-		assertEquals( 7,this.testSubject.NgdList.size());
+		assertEquals( 7,this.testSubject.getNgdList().size());
 		assertEquals("0.5",this.testSubject.rankThresholdPercent.toString());
-		assertEquals(0.9,this.distanceList.get(0));
+		assertEquals("0.9",this.distanceList.get(0).getValue().toString());
 		assertEquals(3,this.graph.getEdgeCount());
+		assertEquals(null,this.testSubject.ngdMap.get(edge1));
+		assertEquals(null,this.testSubject.ngdMap.get(edge3));
+		assertEquals(null,this.testSubject.ngdMap.get(edge4));
+		assertEquals(null,this.testSubject.ngdMap.get(edge5));
+		assertEquals("0.9",this.testSubject.ngdMap.get(edge7).toString());
+		assertEquals(false,this.graph.containsEdge(edge1));
+		assertEquals(true,this.graph.containsEdge(edge2));
+		assertEquals(true,this.graph.containsEdge(edge6));
+		assertEquals(true,this.graph.containsEdge(edge7));
 		
 	}
 
