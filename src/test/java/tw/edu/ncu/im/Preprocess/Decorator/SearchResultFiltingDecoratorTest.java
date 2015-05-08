@@ -18,7 +18,11 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 import tw.edu.ncu.im.Util.IndexSearcher;
-
+/**
+ * 
+ * @author chiang
+ *
+ */
 public class SearchResultFiltingDecoratorTest {
 	SearchResultFiltingDecorator<KeyTerm,TestEdge> testSubject;
 	HashMap<KeyTerm,String> termContent;
