@@ -18,13 +18,9 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 import tw.edu.ncu.im.Util.IndexSearcher;
-/**
- * 
- * @author chiang
- *
- */
-public class SearchResultFiltingDecoratorTest {
-	SearchResultFiltingDecorator<KeyTerm,TestEdge> testSubject;
+
+public class SearchResultFilterTest {
+	SearchResultFilter<KeyTerm,TestEdge> testSubject;
 	HashMap<KeyTerm,String> termContent;
 	IndexSearcher mockSearcher;
 	Graph<KeyTerm,TestEdge> graph;
@@ -51,7 +47,7 @@ public class SearchResultFiltingDecoratorTest {
 		});
 		replay(mockComponent);
 		termContent = new HashMap<>();
-		testSubject = new SearchResultFiltingDecorator<>(mockComponent, termContent,10, 10000, "http://TEST");
+		testSubject = new SearchResultFilter<>(mockComponent, termContent,10, 10000, "http://TEST");
 		mockSearcher = createMock(IndexSearcher.class);
 		
 	}

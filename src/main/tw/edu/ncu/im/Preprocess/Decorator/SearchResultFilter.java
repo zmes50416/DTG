@@ -13,12 +13,12 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Util.IndexSearcher;
 import edu.uci.ics.jung.graph.Graph;
 
-public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E> {
+public class SearchResultFilter<V, E> extends PreprocessDecorator<V, E> {
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
 	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
 	IndexSearcher searcher;
 	int upperBound,lowerBound;
-	public SearchResultFiltingDecorator(PreprocessComponent<V, E> _component,
+	public SearchResultFilter(PreprocessComponent<V, E> _component,
 			HashMap<V, String> _vertexTerms, int LowerBound, int UpperBound,String serverURL) {
 		super(_component);
 		if(upperBound<lowerBound){
