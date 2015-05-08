@@ -18,14 +18,14 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
-import tw.edu.ncu.im.Util.IndexSearcher;
+import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import tw.edu.ncu.im.Util.NGD_calculate;
 
 public class NGDistanceDecoratorTest {
 	NGDistanceDecorator<KeyTerm, TestEdge> testSubject;
 	HashMap<KeyTerm, String> termContent;
 	HashMap<KeyTerm, Long> termSearchResult;
-	IndexSearcher mockSearcher;
+	EmbeddedIndexSearcher mockSearcher;
 	Graph<KeyTerm, TestEdge> graph;
 
 	@Before
@@ -58,7 +58,7 @@ public class NGDistanceDecoratorTest {
 				termSearchResult, "http://TEST");*/
 		testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
 			 "http://TEST");
-		mockSearcher = createMock(IndexSearcher.class);
+		mockSearcher = createMock(EmbeddedIndexSearcher.class);
 	}
 
 	@Test

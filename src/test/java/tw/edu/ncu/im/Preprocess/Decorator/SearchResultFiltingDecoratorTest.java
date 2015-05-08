@@ -17,12 +17,12 @@ import static org.easymock.EasyMock.*;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
-import tw.edu.ncu.im.Util.IndexSearcher;
+import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 
 public class SearchResultFiltingDecoratorTest {
 	SearchResultFiltingDecorator<KeyTerm,TestEdge> testSubject;
 	HashMap<KeyTerm,String> termContent;
-	IndexSearcher mockSearcher;
+	EmbeddedIndexSearcher mockSearcher;
 	Graph<KeyTerm,TestEdge> graph;
 	@Before
 	public void setUp() throws Exception {
@@ -48,7 +48,7 @@ public class SearchResultFiltingDecoratorTest {
 		replay(mockComponent);
 		termContent = new HashMap<>();
 		testSubject = new SearchResultFiltingDecorator<>(mockComponent, termContent,10, 10000, "http://TEST");
-		mockSearcher = createMock(IndexSearcher.class);
+		mockSearcher = createMock(EmbeddedIndexSearcher.class);
 		
 	}
 

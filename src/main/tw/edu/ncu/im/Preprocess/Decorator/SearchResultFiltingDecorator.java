@@ -10,13 +10,13 @@ import java.util.Set;
 import org.apache.solr.client.solrj.SolrServerException;
 
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
-import tw.edu.ncu.im.Util.IndexSearcher;
+import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import edu.uci.ics.jung.graph.Graph;
 
 public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E> {
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
 	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
-	IndexSearcher searcher;
+	EmbeddedIndexSearcher searcher;
 	int upperBound,lowerBound;
 	public SearchResultFiltingDecorator(PreprocessComponent<V, E> _component,
 			HashMap<V, String> _vertexTerms, int LowerBound, int UpperBound,String serverURL) {
@@ -25,7 +25,7 @@ public class SearchResultFiltingDecorator<V, E> extends PreprocessDecorator<V, E
 			throw new IllegalArgumentException("UpperBound should not lower than lowerBound");
 		}
 		this.vertexTerms = _vertexTerms;
-		this.searcher = new IndexSearcher();
+		this.searcher = new EmbeddedIndexSearcher();
 		this.upperBound = UpperBound;
 		this.lowerBound=LowerBound;
 		

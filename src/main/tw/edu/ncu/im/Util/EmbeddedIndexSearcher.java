@@ -1,25 +1,19 @@
 package tw.edu.ncu.im.Util;
 
-import java.awt.datatransfer.StringSelection;
-import java.io.File;
-import java.net.MalformedURLException;
-
-import org.apache.commons.lang.Validate;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.core.CoreContainer;
 /**
- * Searching the keyterm number appear in the index
- * using Wikipedia index and Solr server as the example 
+ * using Embedded way to communicate with Solr server
+ * 
  * @author Dean
  *
  */
-public class IndexSearcher {
+public class EmbeddedIndexSearcher {
 	// Singleton Design pattern only access it by getService() to ensure connection
 	public static String SolrHomePath;
 	public static String solrCoreName;
@@ -27,8 +21,9 @@ public class IndexSearcher {
 	public static final String DEFAULTCORENAME = "collection1";
 	private static volatile SolrServer service; 
 	
-	public IndexSearcher(){
+	private EmbeddedIndexSearcher(){
 	}
+	
 	/**
 	 * Initialize Server setup
 	 * @return server 
@@ -52,7 +47,7 @@ public class IndexSearcher {
 	 */
 	public static SolrServer getService() {
 		if(service==null){//Only enter this once in a runtime
-			synchronized(IndexSearcher.class){
+			synchronized(EmbeddedIndexSearcher.class){
 				if(service==null){//Have to check again or have chance to fail
 				service = initService();
 				}
@@ -62,12 +57,12 @@ public class IndexSearcher {
 	}
 	
 	/**
-	 * searching the Server to get indexed size
+	 * searching the Server to get how many document the term contain
 	 * @param term searching term
 	 * @return number of appear in indexed documents 
 	 * @throws SolrServerException happen when server have connection problem
 	 */
-	public long searchTermSize(String term) throws SolrServerException{
+	public static long searchTermSize(String term) throws SolrServerException{
 		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
 		query.setQuery(term);
@@ -76,8 +71,13 @@ public class IndexSearcher {
 		SolrDocumentList docs = rsp.getResults();
 		return docs.getNumFound();
 	}
-	
-	public long searchMultipleTerm(String[] terms) throws SolrServerException{
+	/**
+	 * Search Multiple term's document
+	 * @param terms
+	 * @return
+	 * @throws SolrServerException
+	 */
+	public static long searchMultipleTerm(String[] terms) throws SolrServerException{
 		if(terms.length == 1){
 			return searchTermSize(terms[0]);
 		}

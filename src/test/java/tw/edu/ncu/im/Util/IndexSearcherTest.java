@@ -13,17 +13,17 @@ import org.junit.Test;
 
 
 public class IndexSearcherTest {
-	IndexSearcher searcher;
+	EmbeddedIndexSearcher searcher;
 	@BeforeClass
 	public static void init() throws Exception {
-		IndexSearcher.SolrHomePath = "F:\\NGD\\NGD\\webpart\\solr";
-		IndexSearcher.solrCoreName = "collection1";
+		EmbeddedIndexSearcher.SolrHomePath = "F:\\NGD\\NGD\\webpart\\solr";
+		EmbeddedIndexSearcher.solrCoreName = "collection1";
 		//"C:\\solr-4.9.1\\example\\solr";
 		//F:\\NGD\\NGD\\webpart\\solr
 	}
 	@Before
 	public void setUp() throws Exception {
-			searcher = new IndexSearcher();
+			searcher = new EmbeddedIndexSearcher();
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class IndexSearcherTest {
 	@Test
 	public void testMultiTermsCombinedSearch(){
 		try {
-			SolrServer service = IndexSearcher.getService();
+			SolrServer service = EmbeddedIndexSearcher.getService();
 			String multiTerm[] = {
 				"Apple","Google","Samsung","Yahoo"	
 			};

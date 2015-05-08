@@ -9,7 +9,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 
 import edu.uci.ics.jung.graph.Graph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
-import tw.edu.ncu.im.Util.IndexSearcher;
+import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import tw.edu.ncu.im.Util.NGD_calculate;
 
 /**
@@ -23,7 +23,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 	HashMap<V, String> vertexTerms = new HashMap<V, String>();
 	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
 	HashMap<E, Double> edgeDistance = new HashMap<E, Double>();
-	IndexSearcher searcher;
+	EmbeddedIndexSearcher searcher;
 
 	/**
 	 * 若無提供term搜尋結果數的hashmap 則用以下建構子
@@ -40,7 +40,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 			HashMap<V, String> _vertexTerms, String serverURL) {
 		super(_component);
 		this.vertexTerms = _vertexTerms;
-		this.searcher = new IndexSearcher();
+		this.searcher = new EmbeddedIndexSearcher();
 	}
 
 	/**
