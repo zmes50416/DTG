@@ -24,6 +24,12 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	HashSet<KeyTerm> terms;
 	HashSet<TestEdge> edges;
 	HashMap<V,String> vertexContent = new HashMap<>();
+	/**
+	 * @return the vertexContent
+	 */
+	public HashMap<V, String> getVertexContent() {
+		return vertexContent;
+	}
 	public RouterNewsPreprocessor(Factory<V> _vertexFactory,Factory<E>_edgeFactory){
 		this.vertexFactory = _vertexFactory;
 		this.edgeFactory = _edgeFactory;
