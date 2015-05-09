@@ -23,11 +23,10 @@ import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
-public class NgdFilterTest {
-	NgdFilter<KeyTerm, TestEdge> testSubject;
+public class NgdEdgeFilterTest {
+	NgdEdgeFilter<KeyTerm, TestEdge> testSubject;
 	HashMap<KeyTerm, String> termContent;
 	HashMap<TestEdge, Double> edgeDistance;
-	List<Entry<TestEdge, Double>> distanceList;
 	Graph<KeyTerm, TestEdge> graph;
 	@Before
 	public void setUp() throws Exception {
@@ -54,9 +53,7 @@ public class NgdFilterTest {
 		replay(mockComponent);
 		termContent = new HashMap<>();
 		edgeDistance = new HashMap<>();
-		distanceList= new ArrayList<Entry<TestEdge, Double>>();
-		testSubject = new NgdFilter<KeyTerm, TestEdge>(mockComponent,
-				termContent, edgeDistance,distanceList,0.5);
+		testSubject = new NgdEdgeFilter<KeyTerm, TestEdge>(mockComponent, edgeDistance,0.5);
 	}
 
 	@Test
@@ -97,20 +94,10 @@ public class NgdFilterTest {
 		this.graph.addEdge(edge6, term5, term1);
 		this.graph.addEdge(edge7, term5, term3);
 		
-		this.distanceList.addAll(this.edgeDistance.entrySet());
-		Collections.sort(this.distanceList, new Comparator<Map.Entry<TestEdge, Double>>() {
-			public int compare(Map.Entry<TestEdge, Double> entry1,
-					Map.Entry<TestEdge, Double> entry2) {
-				return entry2.getValue().compareTo(entry1.getValue());
-			}
-		});
-		
-		this.testSubject.execute(null);
+		Graph<KeyTerm, TestEdge> filitedGraph = this.testSubject.execute(null);
 		
 		assertEquals(this.termContent.size(),graph.getVertexCount());
-		assertEquals( 7,this.testSubject.getNgdList().size());
 		assertEquals("0.5",this.testSubject.rankThresholdPercent.toString());
-		assertEquals("0.9",this.distanceList.get(0).getValue().toString());
 		assertEquals(3,this.graph.getEdgeCount());
 		assertEquals(null,this.testSubject.ngdMap.get(edge1));
 		assertEquals(null,this.testSubject.ngdMap.get(edge3));
