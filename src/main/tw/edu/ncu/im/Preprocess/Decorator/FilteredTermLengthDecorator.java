@@ -3,6 +3,7 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -12,7 +13,7 @@ public class FilteredTermLengthDecorator<V,E> extends PreprocessDecorator<V, E> 
 	/**
 	 * vertexContent :vertex與Term的配對
 	 */
-	HashMap<V, String> vertexContent;
+	Map<V, String> vertexContent;
 	
 	/**
 	 * minLength :term之最小長度
@@ -24,7 +25,7 @@ public class FilteredTermLengthDecorator<V,E> extends PreprocessDecorator<V, E> 
 	 * @param _component :原始的元件
 	 * @param content :vertex與Term的配對
 	 */
-	public FilteredTermLengthDecorator(PreprocessComponent<V, E> _component, HashMap<V, String> content, int _minLength) {
+	public FilteredTermLengthDecorator(PreprocessComponent<V, E> _component, Map<V, String> content, int _minLength) {
 		super(_component);
 		this.vertexContent = content;
 		this.minLength = _minLength;
@@ -52,7 +53,7 @@ public class FilteredTermLengthDecorator<V,E> extends PreprocessDecorator<V, E> 
 	/**
 	 * @return the vertexContent :vertex與Term的配對
 	 */
-	public HashMap<V, String> getVertexContent() {
+	public Map<V, String> getVertexContent() {
 		return vertexContent;
 	}
 
