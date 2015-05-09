@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.collections15.Factory;
@@ -29,7 +31,8 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 	/** 
 	 * 節點的字詞內容配對保持在此，在<code>execute()</code>以後可以從此得到POS過濾結果
 	 */
-	HashMap<V,String> vertexTerms = new HashMap<V,String>();
+	Map<V,String> vertexResultsTerms = new HashMap<V,String>();
+	Map<V,String> vertextTerms;
 	/**
 	 * Constructor, 連結元件
 	 * @param _component latest document graph
@@ -37,7 +40,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 	 */
 	public PartOfSpeechFilter(PreprocessComponent<V,E> _component,HashMap<V,String> _vertextTerms){
 		super(_component);		
-		this.vertexTerms = _vertextTerms;
+		this.vertextTerms = _vertextTerms;
 	}
 	/**
 	 * 過濾非NN,NP的詞性，並且尋找可能的複合單字
@@ -48,26 +51,30 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 				
 		 
 		Graph<V,E> originGraph = this.originComponent.execute(doc);
-		Graph<V,E> documentGraph = new UndirectedSparseGraph<V,E>();
 		Collection<V> terms = originGraph.getVertices();
-		HashMap<V,String> newVertexTerms = new HashMap<>();
+		HashSet<V> termsToRemove = new HashSet<>();
 		List<String> pharses = new ArrayList<>();//all possible terms
 		
 		for(V term:terms){
-			String content = this.vertexTerms.get(term);
+			String content = this.vertextTerms.get(term);
 			List<String> tokens = this.tokenize(content);
 			String[] tokensArray = new String[tokens.size()];
 			tokensArray = tokens.toArray(tokensArray);
+			termsToRemove.add(term);
 			pharses.addAll(this.compoundPharse(tokensArray));
 		}
+		for(V term:termsToRemove){
+			originGraph.removeVertex(term);
+		}
+		System.out.println(originGraph.getVertexCount());
 		for(String pharse:pharses){
 			V node = this.vertexFactory.create();
-			newVertexTerms.put(node, pharse);
-			documentGraph.addVertex(node);
+			this.vertexResultsTerms.put(node, pharse);
+			originGraph.addVertex(node);
 		}
-		this.vertexTerms = newVertexTerms;
-		
-		return documentGraph;
+		System.out.println(originGraph.getVertexCount());
+
+		return originGraph;
 	}
 	private List<String> tokenize(String line){
 		StringTokenizer st = new StringTokenizer(line);
@@ -118,6 +125,12 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	/**
+	 * @return the vertexResultsTerms
+	 */
+	public Map<V, String> getVertexTerms() {
+		return vertexResultsTerms;
 	}
 	
 }

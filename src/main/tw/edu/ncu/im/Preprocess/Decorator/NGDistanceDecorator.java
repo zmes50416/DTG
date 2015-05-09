@@ -3,6 +3,7 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -10,6 +11,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import edu.uci.ics.jung.graph.Graph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
+import tw.edu.ncu.im.Util.IndexSearchable;
 import tw.edu.ncu.im.Util.NGD_calculate;
 
 /**
@@ -20,10 +22,11 @@ import tw.edu.ncu.im.Util.NGD_calculate;
  * @param <E>
  */
 public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
-	HashMap<V, String> vertexTerms = new HashMap<V, String>();
-	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
-	HashMap<E, Double> edgeDistance = new HashMap<E, Double>();
-	EmbeddedIndexSearcher searcher;
+	Map<V, String> vertexTerms = new HashMap<V, String>();
+	Map<V, Long> termsSearchResult = new HashMap<V, Long>();
+	Map<E, Double> edgeNGDistance = new HashMap<E, Double>();
+
+	IndexSearchable searcher;
 
 	/**
 	 * 若無提供term搜尋結果數的hashmap 則用以下建構子
@@ -33,23 +36,30 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 	 *            存放node與term的string
 	 * @param termsSearchResult
 	 *            term和對應的搜尋結果數
-	 * @param serverURL
-	 *            要進行連線搜尋的SolrURL
+	 * @param searcher
+	 *            決定搜尋的方法
 	 */
 	public NGDistanceDecorator(PreprocessComponent<V, E> _component,
-			HashMap<V, String> _vertexTerms, String serverURL) {
+			Map<V, String> _vertexTerms, IndexSearchable searcher) {
 		super(_component);
 		this.vertexTerms = _vertexTerms;
-		this.searcher = new EmbeddedIndexSearcher();
+		this.searcher = searcher;
 	}
 
 	/**
-	 * 若有提供term搜尋結果數的hashmap 則用以下建構子
+	 * 若有提供term搜尋結果數的hashmap，加速搜尋速度
+	 * @param _component
+	 * @param _vertexTerms
+	 *            存放node與term的string
+	 * @param termsSearchResult
+	 *            term和對應的搜尋結果數
+	 * @param serverURL
+	 *            決定搜尋的方法
 	 */
 	public NGDistanceDecorator(PreprocessComponent<V, E> _component,
-			HashMap<V, String> _vertexTerms,
-			HashMap<V, Long> termsSearchResult, String serverURL) {
-		this( _component, _vertexTerms,  serverURL);
+			Map<V, String> _vertexTerms,
+			Map<V, Long> termsSearchResult, IndexSearchable searcher) {
+		this( _component, _vertexTerms,  searcher);
 		this.termsSearchResult = termsSearchResult;
 	}
 
@@ -100,12 +110,18 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 							term1SearchResult, term2SearchResult,
 							term1term2Result);
 					E edge = this.edgeFactory.create();
-					edgeDistance.put(edge, NGDistance);
+					edgeNGDistance.put(edge, NGDistance);
 					originGraph.addEdge(edge, term1, term2);
 				}
 			}
 		}
 		return originGraph;
+	}
+	/**
+	 * @return the edgeNGDistance
+	 */
+	public Map<E, Double> getEdgeDistance() {
+		return edgeNGDistance;
 	}
 
 }
