@@ -18,11 +18,12 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
+import tw.edu.ncu.im.Util.IndexSearchable;
 
-public class SearchResultFiltingDecoratorTest {
-	SearchResultFiltingDecorator<KeyTerm,TestEdge> testSubject;
+public class SearchResultFilterTest {
+	SearchResultFilter<KeyTerm,TestEdge> testSubject;
 	HashMap<KeyTerm,String> termContent;
-	EmbeddedIndexSearcher mockSearcher;
+	IndexSearchable mockSearcher;
 	Graph<KeyTerm,TestEdge> graph;
 	@Before
 	public void setUp() throws Exception {
@@ -47,14 +48,13 @@ public class SearchResultFiltingDecoratorTest {
 		});
 		replay(mockComponent);
 		termContent = new HashMap<>();
-		testSubject = new SearchResultFiltingDecorator<>(mockComponent, termContent,10, 10000, "http://TEST");
-		mockSearcher = createMock(EmbeddedIndexSearcher.class);
+		mockSearcher = createMock(IndexSearchable.class);
+		testSubject = new SearchResultFilter<>(mockComponent, termContent,10, 10000, mockSearcher);
 		
 	}
 
 	@Test
 	public void testExecute() throws SolrServerException {
-		testSubject.searcher = mockSearcher;
 		expect(mockSearcher.searchTermSize(notNull(String.class))).andReturn((long) 100).andReturn((long) 1000000).andReturn((long) 1);
 		replay(mockSearcher);
 		KeyTerm term1 = new KeyTerm();
