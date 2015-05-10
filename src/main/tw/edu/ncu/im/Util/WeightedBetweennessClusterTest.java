@@ -54,19 +54,26 @@ public class WeightedBetweennessClusterTest {
 		Set<Set<KeyTerm>> clusters = bc.transform(graph);
 		assertEquals("should cluster correctly",clusters.size(),2);
 	}
-	//Caution: This is not a test! it just doing for understanding the way how BetweennessCentrality work in algo.
+	//Caution: This is not a test of WeightedBetweennessCluster! it just doing for understanding the way how BetweennessCentrality work in algo.
+	//This simulate the case in : http://med.bioinf.mpi-inf.mpg.de/netanalyzer/help/2.6.1/#nodeBetween
 	@Test
 	public void testBetweenessWeightFunction(){
-		KeyTerm k1 = new KeyTerm();
-		KeyTerm k2 = new KeyTerm();
-		KeyTerm k3 = new KeyTerm();
-		KeyTerm k4 = new KeyTerm();
+		KeyTerm kA = new KeyTerm();
+		KeyTerm kB = new KeyTerm();
+		KeyTerm kC = new KeyTerm();
+		KeyTerm kD = new KeyTerm();
+		KeyTerm kE = new KeyTerm();
 		TestEdge e = new TestEdge(1);
 		TestEdge e1 = new TestEdge(1);
 		TestEdge e2 = new TestEdge(1);
-		graph.addEdge(e, k1, k2);
-		graph.addEdge(e1, k2,k3);
-		graph.addEdge(e2,k3,k4);
+		TestEdge e3 = new TestEdge(1);
+		TestEdge e4 = new TestEdge(1);
+		
+		graph.addEdge(e, kA, kB);
+		graph.addEdge(e1, kB,kC);
+		graph.addEdge(e2,kB,kD);
+		graph.addEdge(e3, kC,kE);
+		graph.addEdge(e4, kD,kE);
 		BetweennessCentrality<KeyTerm,TestEdge> bc = new BetweennessCentrality<>(graph,new Transformer<TestEdge,Double>(){
 
 			@Override
@@ -76,9 +83,7 @@ public class WeightedBetweennessClusterTest {
 			
 		});
 		
-		System.out.println(bc.getEdgeScore(e));
-		System.out.println(bc.getEdgeScore(e1));
-		System.out.println(bc.getEdgeScore(e2));
+		assertEquals("the node B should expect ",3.5,bc.getVertexScore(kB),0.01);
 		
 	}
 
