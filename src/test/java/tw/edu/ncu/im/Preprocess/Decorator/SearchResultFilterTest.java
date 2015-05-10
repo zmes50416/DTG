@@ -49,23 +49,28 @@ public class SearchResultFilterTest {
 		termContent = new HashMap<>();
 		mockSearcher = createMock(IndexSearchable.class);
 		testSubject = new SearchResultFilter<>(mockComponent, termContent,10, 10000, mockSearcher);
+
 		
 	}
 
 	@Test
 	public void testExecute() throws SolrServerException {
+
 		expect(mockSearcher.searchTermSize(notNull(String.class))).andReturn((long) 100).andReturn((long) 1000000).andReturn((long) 1);
 		replay(mockSearcher);
 		KeyTerm term1 = new KeyTerm();
 		KeyTerm term2 = new KeyTerm();
 		KeyTerm term3 = new KeyTerm();
-		this.termContent.put(term1, "");
-		this.termContent.put(term2, "");
-		this.termContent.put(term3, "");
+		this.termContent.put(term1, "computer");
+		this.termContent.put(term2, "sience");
+		this.termContent.put(term3, "technology");
 		this.graph.addVertex(term1);
 		this.graph.addVertex(term2);
 		this.graph.addVertex(term3);
-		assertEquals(1,this.testSubject.execute(null).getVertexCount());
+		this.testSubject.execute(null);
+		assertEquals(1,this.graph.getVertexCount());
+		assertEquals(1,testSubject.termsSearchResult.size());
+		assertEquals("100",testSubject.termsSearchResult.get(term2).toString());
 	}
 
 }
