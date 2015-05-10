@@ -10,7 +10,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 
 import edu.uci.ics.jung.graph.Graph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
-import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import tw.edu.ncu.im.Util.IndexSearchable;
 import tw.edu.ncu.im.Util.NGD_calculate;
 
@@ -106,12 +105,14 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					double NGDistance = NGD_calculate.NGD_cal(
+					double ngDistance = NGD_calculate.NGD_cal(
 							term1SearchResult, term2SearchResult,
 							term1term2Result);
-					E edge = this.edgeFactory.create();
-					edgeNGDistance.put(edge, NGDistance);
-					originGraph.addEdge(edge, term1, term2);
+					if(ngDistance<=1||ngDistance>=0){ //distance larger than 1 or less than 0 is all abnormalized distance
+						E edge = this.edgeFactory.create();
+						edgeNGDistance.put(edge, ngDistance);
+						originGraph.addEdge(edge, term1, term2);
+					}
 				}
 			}
 		}

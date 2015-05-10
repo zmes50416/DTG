@@ -92,7 +92,6 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 			String[] tags = tagger.tag(sentence);
 			for (int i = 0; i < sentence.length; i++) {
 				String key3 = sentence[i];
-				String word;
 				if ((tags[i].equals("NN") || tags[i].equals("NP"))) { 	// 單字過濾，根據D. Tufis and O. Mason於1998提出的Qtag
 					pharses.add(key3);
 					try {// 組合字過濾

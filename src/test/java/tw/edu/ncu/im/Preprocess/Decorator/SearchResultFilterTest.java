@@ -17,7 +17,6 @@ import static org.easymock.EasyMock.*;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
-import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import tw.edu.ncu.im.Util.IndexSearchable;
 
 public class SearchResultFilterTest {

@@ -5,22 +5,22 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
-import tw.edu.ncu.im.Util.EmbeddedIndexSearcher;
 import tw.edu.ncu.im.Util.IndexSearchable;
 import edu.uci.ics.jung.graph.Graph;
 
 public class SearchResultFilter<V, E> extends PreprocessDecorator<V, E> {
-	HashMap<V, String> vertexTerms = new HashMap<V, String>();
-	HashMap<V, Long> termsSearchResult = new HashMap<V, Long>();
+	Map<V, String> vertexTerms = new HashMap<V, String>();
+	Map<V, Long> termsSearchResult = new HashMap<V, Long>();
 	IndexSearchable searcher;
 	int upperBound,lowerBound;
 	public SearchResultFilter(PreprocessComponent<V, E> _component,
-			HashMap<V, String> _vertexTerms, int LowerBound, int UpperBound,IndexSearchable searcher) {
+			Map<V, String> _vertexTerms, int LowerBound, int UpperBound,IndexSearchable searcher) {
 		super(_component);
 		if(upperBound<lowerBound){
 			throw new IllegalArgumentException("UpperBound should not lower than lowerBound");

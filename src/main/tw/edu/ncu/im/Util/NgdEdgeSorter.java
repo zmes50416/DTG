@@ -27,7 +27,7 @@ public class NgdEdgeSorter{
 	 * HashMap轉為Arraylist做排序，從最大到最小排序
 	 * @param ngd to sort
 	 */
-	public static List<Entry<?, Double>> sort(HashMap<? , Double> unsortingMap){
+	public static List<Entry<?, Double>> sort(Map<? , Double> unsortingMap){
 		List<Entry<? extends Object, Double>> sortingList = new ArrayList<Entry<? extends Object, Double>>(unsortingMap.entrySet());
 		Collections.sort(sortingList, new Comparator<Map.Entry<?, Double>>() {
 			public int compare(Map.Entry<?, Double> entry1,
