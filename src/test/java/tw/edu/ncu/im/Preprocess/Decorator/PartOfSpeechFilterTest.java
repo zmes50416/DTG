@@ -57,7 +57,7 @@ public class PartOfSpeechFilterTest{
 		p = new PartOfSpeechFilter<>(mockGraph, content);
 		p.execute(createMock(File.class));
 		
-		assertSame("should have 5 words",5,p.vertexTerms.size());
+		assertSame("should have 5 words",5,p.vertexResultsTerms.size());
 	}
 	private class Term {
 

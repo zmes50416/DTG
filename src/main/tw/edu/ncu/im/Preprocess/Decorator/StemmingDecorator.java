@@ -2,6 +2,7 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
@@ -9,9 +10,9 @@ import tw.edu.ncu.im.Util.Stemmer;
 import edu.uci.ics.jung.graph.Graph;
 
 public class StemmingDecorator<V,E> extends PreprocessDecorator<V, E> {
-	HashMap<V,String> vertexContent;
+	Map<V,String> vertexContent;
 	PorterStemmer stemmer = new PorterStemmer();
-	public StemmingDecorator(PreprocessComponent<V, E> _component,HashMap<V,String> content) {
+	public StemmingDecorator(PreprocessComponent<V, E> _component,Map<V,String> content) {
 		super(_component);
 		this.vertexContent = content;
 		// TODO Auto-generated constructor stub

@@ -2,6 +2,7 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.uci.ics.jung.graph.Graph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
@@ -14,13 +15,13 @@ import tw.edu.ncu.im.Preprocess.PreprocessComponent;
  */
 
 public class TermToLowerCaseDecorator<V,E> extends PreprocessDecorator<V, E> {
-	HashMap<V, String> vertexContent;
+	Map<V, String> vertexContent;
 	/**
 	 * 
 	 * @param _component 原始的元件
 	 * @param content vertex 與 term的配對 
 	 */
-	public TermToLowerCaseDecorator(PreprocessComponent<V, E> _component, HashMap<V,String> content) {
+	public TermToLowerCaseDecorator(PreprocessComponent<V, E> _component, Map<V,String> content) {
 		super(_component);
 		this.vertexContent = content;
 	}
@@ -35,7 +36,7 @@ public class TermToLowerCaseDecorator<V,E> extends PreprocessDecorator<V, E> {
 		return originGraph;
 	}
 	
-	public HashMap<V, String> getVertexContent() {
+	public Map<V, String> getVertexContent() {
 		return vertexContent;
 	}
 	

@@ -1,9 +1,6 @@
 package tw.edu.ncu.im.Preprocess.Decorator;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.notNull;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
@@ -18,14 +15,13 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
 import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
 import tw.edu.ncu.im.Preprocess.graph.TestEdge;
-import tw.edu.ncu.im.Util.IndexSearcher;
-import tw.edu.ncu.im.Util.NGD_calculate;
+import tw.edu.ncu.im.Util.IndexSearchable;
 
 public class NGDistanceDecoratorTest {
 	NGDistanceDecorator<KeyTerm, TestEdge> testSubject;
 	HashMap<KeyTerm, String> termContent;
 	HashMap<KeyTerm, Long> termSearchResult;
-	IndexSearcher mockSearcher;
+	IndexSearchable mockSearcher;
 	Graph<KeyTerm, TestEdge> graph;
 
 	@Before
@@ -56,9 +52,9 @@ public class NGDistanceDecoratorTest {
 		termSearchResult = new HashMap<>();
 		/*testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
 				termSearchResult, "http://TEST");*/
-		testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
-			 "http://TEST");
-		mockSearcher = createMock(IndexSearcher.class);
+		mockSearcher = createMock(IndexSearchable.class);
+		testSubject = new NGDistanceDecorator<KeyTerm, TestEdge>(mockComponent, termContent,
+				mockSearcher);
 	}
 
 	@Test

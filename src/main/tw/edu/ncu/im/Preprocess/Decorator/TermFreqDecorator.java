@@ -3,6 +3,7 @@ package tw.edu.ncu.im.Preprocess.Decorator;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -22,18 +23,18 @@ public class TermFreqDecorator<V, E> extends PreprocessDecorator<V, E>{
 	/**
 	 * 節點與關鍵字之TF值的配對
 	 */
-	HashMap<String,Double> termFreqMap;
+	Map<String,Double> termFreqMap;
 	/**
 	 * termValue
 	 */
-	private HashMap<V,String> termContentMap;
+	private Map<V,String> termContentMap;
 	/**
 	 * 
 	 * @param _component :原始的元件
 	 * @param content :vertex與term的配對
 	 * @param contentValues :vertex與Term Frequency的配對
 	 */
-	public TermFreqDecorator(PreprocessComponent<V, E> _component, HashMap<V,String> content) {
+	public TermFreqDecorator(PreprocessComponent<V, E> _component, Map<V,String> content) {
 		super(_component);		
 		this.termContentMap = content;
 		this.termFreqMap = new HashMap<String,Double>();
