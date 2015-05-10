@@ -60,7 +60,7 @@ public class EmbeddedIndexSearcher implements IndexSearchable {
 	public long searchTermSize(String term) throws SolrServerException{
 		String queryTerm = "\"" + term + "\"";
 		SolrQuery query = new SolrQuery();
-		query.setQuery(term);
+		query.setQuery(queryTerm);
 		query.setHighlight(false);
 		QueryResponse rsp = getService().query(query);
 		SolrDocumentList docs = rsp.getResults();
