@@ -24,7 +24,7 @@ import tw.edu.ncu.im.Preprocess.Decorator.PreprocessDecorator;
 public class NgdEdgeSorter{
 
 	/**
-	 * HashMap轉為Arraylist做排序，從最大到最小排序
+	 * HashMap轉為Arraylist做排序，從最小到最大排序
 	 * @param ngd to sort
 	 */
 	public static List<Entry<?, Double>> sort(Map<? , Double> unsortingMap){
@@ -32,7 +32,7 @@ public class NgdEdgeSorter{
 		Collections.sort(sortingList, new Comparator<Map.Entry<?, Double>>() {
 			public int compare(Map.Entry<?, Double> entry1,
 					Map.Entry<?, Double> entry2) {
-				return entry2.getValue().compareTo(entry1.getValue());
+				return entry1.getValue().compareTo(entry2.getValue());
 			}
 		});
 		return sortingList;
