@@ -39,7 +39,6 @@ public class FilteredTermLengthDecorator<V,E> extends PreprocessDecorator<V, E> 
 		for(V node:originGraph.getVertices()){
 			String term = this.vertexContent.get(node);
 			if(term.length() < minLength){
-				//this.vertexContent.remove(node);
 				removeTerms.add(node);
 			}
 		}

@@ -105,9 +105,11 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 					double ngDistance = NGD_calculate.NGD_cal(
 							term1SearchResult, term2SearchResult,
 							term1term2Result);
+					if(ngDistance<1){
 						E edge = this.edgeFactory.create();
 						edgeNGDistance.put(edge, ngDistance);
 						originGraph.addEdge(edge, term1, term2);
+					}
 				}
 			}
 		}

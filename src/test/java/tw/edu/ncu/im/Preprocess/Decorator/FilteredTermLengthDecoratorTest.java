@@ -60,13 +60,14 @@ public class FilteredTermLengthDecoratorTest {
 		KeyTerm term2 = new KeyTerm();
 		
 		this.nodeContent.put(term1, "AA");
-		this.nodeContent.put(term2, "Apple");
+		this.nodeContent.put(term2, "App");
 		graph.addVertex(term1);
 		graph.addVertex(term2);
 		
 		testSubject.execute(null);
 		
 		assertEquals("Should only one node left",1,graph.getVertexCount());
+		assertTrue(graph.containsVertex(term2));
 	}
 
 }

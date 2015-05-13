@@ -126,7 +126,7 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 	/**
 	 * @return the vertexResultsTerms
 	 */
-	public Map<V, String> getVertexTerms() {
+	public Map<V, String> getVertexResultsTerms() {
 		return vertexResultsTerms;
 	}
 	
