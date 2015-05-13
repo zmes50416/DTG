@@ -67,4 +67,11 @@ public class SearchResultFilter<V, E> extends PreprocessDecorator<V, E> {
 		return originGraph;
 	}
 
+	/**
+	 * @return the termsSearchResult
+	 */
+	public Map<V, Long> getTermsSearchResult() {
+		return termsSearchResult;
+	}
+
 }

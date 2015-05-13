@@ -53,8 +53,8 @@ public class NgdSorterTest {
 
 		List<Entry<?, Double>> sortedEdges = NgdEdgeSorter.sort(edgeDistance);
 		assertEquals(3, sortedEdges.size());
-		assertSame("biggest edge should be edge2",edge2, sortedEdges.get(0).getKey());
-		assertSame("smallest edge should be edge3",edge3, sortedEdges.get(2).getKey());
+		assertSame("smallest edge should be edge2",edge3, sortedEdges.get(0).getKey());
+		assertSame("Biggest edge should be edge3",edge2, sortedEdges.get(2).getKey());
 	}
 
 }

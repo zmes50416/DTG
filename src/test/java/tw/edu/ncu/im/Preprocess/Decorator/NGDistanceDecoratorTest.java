@@ -51,8 +51,6 @@ public class NGDistanceDecoratorTest {
 		replay(mockComponent);
 		termContent = new HashMap<>();
 		termSearchResult = new HashMap<>();
-		/*testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
-				termSearchResult, "http://TEST");*/
 		mockSearcher = createMock(IndexSearchable.class);
 		testSubject = new NGDistanceDecorator<KeyTerm, TestEdge>(mockComponent, termContent,
 				mockSearcher);
@@ -62,9 +60,9 @@ public class NGDistanceDecoratorTest {
 	public void testExecute() throws SolrServerException {
 		testSubject.searcher = mockSearcher;
 		
-		KeyTerm term1 = new KeyTerm();
-		KeyTerm term2 = new KeyTerm();
-		KeyTerm term3 = new KeyTerm();
+		KeyTerm term1 = new KeyTerm("apple");
+		KeyTerm term2 = new KeyTerm("banana");
+		KeyTerm term3 = new KeyTerm("orange");
 		this.termContent.put(term1, "apple");
 		this.termContent.put(term2, "banana");
 		this.termContent.put(term3, "orange");		

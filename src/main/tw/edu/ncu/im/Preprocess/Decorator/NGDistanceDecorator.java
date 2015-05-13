@@ -80,12 +80,8 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 				long SearchResult = 0;
 				try {
 					SearchResult = this.searcher.searchTermSize(vertexTerms.get(term));
-				} catch (SolrServerException e) {// Retry
-					try {
-						SearchResult = this.searcher.searchTermSize(vertexTerms.get(term));
-					} catch (SolrServerException e1) {
-						e1.printStackTrace();
-					}
+				} catch (SolrServerException e) {
+					e.printStackTrace();
 				}
 				this.termsSearchResult.put(term, SearchResult);
 			}
@@ -109,11 +105,9 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 					double ngDistance = NGD_calculate.NGD_cal(
 							term1SearchResult, term2SearchResult,
 							term1term2Result);
-					if(ngDistance<=1||ngDistance>=0){ //distance larger than 1 or less than 0 is all abnormalized distance
 						E edge = this.edgeFactory.create();
 						edgeNGDistance.put(edge, ngDistance);
 						originGraph.addEdge(edge, term1, term2);
-					}
 				}
 			}
 		}
