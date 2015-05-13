@@ -49,9 +49,19 @@ public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 			originGraph.removeEdge(edge);
 		}
 		/**
+		 * copy originGraph to tempGraph
+		 */
+		Graph<V, E> tempGraph = originGraph;
+		for (V v : originGraph.getVertices()) {
+			tempGraph.addVertex(v);
+		}
+		for (E e : originGraph.getEdges()) {
+			tempGraph.addEdge(e, originGraph.getIncidentVertices(e));
+		}
+		/**
 		 * 找出各點k-core值後取得最大的k
 		 */
-		coreMap = getKcore(originGraph);
+		coreMap = getKcore(tempGraph);
 		List<Entry<?, Integer>> sortedKcore = sort(coreMap);
 		int maxK;
 		maxK=sortedKcore.get(0).getValue();
@@ -78,27 +88,27 @@ public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 		return sortingList;
 	}
 
-	private Map<V, Integer> getKcore(Graph<V, E> originGraph) {
+	private Map<V, Integer> getKcore(Graph<V, E> inputGraph) {
 		int k = 0;
-		Graph<V, E> tempGraph = originGraph;
+
 		Map<V, Integer> outputMap = new HashMap<V, Integer>();
 		Set<V> toRemoveVertexs = new HashSet<V>();
-		while ( tempGraph.getVertexCount() > 0) {
+		while ( inputGraph.getVertexCount() > 0) {
 			/**
 			 * 刪除degree<k的node
 			 */
-			for (V node : tempGraph.getVertices()) { //先存入toRemoveVertexs
-				if (tempGraph.degree(node) < k) {
+			for (V node : inputGraph.getVertices()) { //先存入toRemoveVertexs
+				if (inputGraph.degree(node) < k) {
 					toRemoveVertexs.add(node);
 				}
 			}
 			for(V node: toRemoveVertexs){	//圖形node從toRemoveVertexs中刪掉
-				tempGraph.removeVertex(node);
+				inputGraph.removeVertex(node);
 			}
 			/**
 			 * 剩餘node,K-core值至少大於k
 			 */
-			for (V node : tempGraph.getVertices()) { 
+			for (V node : inputGraph.getVertices()) { 
 				outputMap.put(node, k);
 			}
 			k++;
