@@ -41,13 +41,12 @@ public class IndexSearcherTest {
 		double b = searcher.searchMultipleTerm(new String[]{"Google","Yahoo"});
 		double aa = new HttpIndexSearcher().searchTermSize("Google");
 		double bb = new HttpIndexSearcher().searchMultipleTerm(new String[]{"Google","Yahoo"});
-		assertEquals(a,aa,0);
-		assertEquals(b,bb,0);
+		assertEquals("Search result should be the same no matter from Http or Embedded",a,aa,0);
+		assertEquals("Search result should be the same no matter from Http or Embedded",b,bb,0);
 	}
 	@Test
 	public void testSingleTermSearch() throws SolrServerException {
 			long num = this.searcher.searchTermSize("Apple");
-			System.out.println(num);
 			
 			assertThat(num,not(equalTo((long)0)));
 
@@ -55,15 +54,13 @@ public class IndexSearcherTest {
 	@Test
 	public void testMultiTermsCombinedSearch(){
 		try {
-			SolrServer service = new EmbeddedIndexSearcher().getService();
 			String multiTerm[] = {
 				"Google","Yahoo"	
 			};
 			long num = this.searcher.searchMultipleTerm(multiTerm);
-			System.out.println(num);
 			
 			assertThat(num,not(equalTo((long)0)));
-			assertNotNull(service);
+			assertTrue("Should always smaller or equal the single result",num<=this.searcher.searchTermSize("Apple"));
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}
