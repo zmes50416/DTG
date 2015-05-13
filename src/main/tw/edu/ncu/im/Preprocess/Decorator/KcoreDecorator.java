@@ -12,13 +12,16 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
 import tw.edu.ncu.im.Preprocess.PreprocessComponent;
+import tw.edu.ncu.im.Preprocess.graph.KeyTerm;
+import tw.edu.ncu.im.Preprocess.graph.TestEdge;
 import tw.edu.ncu.im.Util.NgdEdgeSorter;
+
 /**
- * 過濾掉小於門檻值的邊
- * 利用各點degree找出各點k-core值 
- * 排列k-core值
- * 只留下最大k-core值的圖形
+ * 過濾掉小於門檻值的邊 利用各點degree找出各點k-core值 排列k-core值 只留下最大k-core值的圖形
+ * 
  * @author chiang
  *
  * @param <V>
@@ -26,53 +29,70 @@ import tw.edu.ncu.im.Util.NgdEdgeSorter;
  */
 public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 	Map<E, Double> ngdMap = new HashMap<E, Double>();
-	Map<V, Integer> coreMap = new HashMap<V,Integer>();
+	Map<V, Integer> coreMap = new HashMap<V, Integer>();
 	Double edgeThreshold;
-	public KcoreDecorator(PreprocessComponent<V, E> _component, Map<E, Double> _edgeDistance,Double _edgeThreshold) {
+
+	public KcoreDecorator(PreprocessComponent<V, E> _component,
+			Map<E, Double> _edgeDistance, Double _edgeThreshold) {
 		super(_component);
 		this.ngdMap = _edgeDistance;
-		this.edgeThreshold= _edgeThreshold;
+		this.edgeThreshold = _edgeThreshold;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> originGraph = this.originComponent.execute(doc);
 		Set<V> toRemoveVerteices = new HashSet<V>();
 		Set<E> toRemoveEdges = new HashSet<E>();
-		//將超過門檻值的邊加入toRemoveEdges後從圖形刪除
-		for(E edge:originGraph.getEdges()){
-			if(ngdMap.get(edge)>edgeThreshold){
+		// 將超過門檻值的邊加入toRemoveEdges後從圖形刪除
+		for (E edge : originGraph.getEdges()) {
+			if (ngdMap.get(edge) - edgeThreshold>0) {
 				toRemoveEdges.add(edge);
 			}
 		}
-		for(E edge:toRemoveEdges){
+		for (E edge : toRemoveEdges) {
 			originGraph.removeEdge(edge);
 		}
 		/**
 		 * copy originGraph to tempGraph
 		 */
-		Graph<V, E> tempGraph = originGraph;
-		for (V v : originGraph.getVertices()) {
-			tempGraph.addVertex(v);
+		Graph<V, E> tempGraph = new UndirectedSparseGraph<V, E>();
+		Set<V> nodesCollector = new HashSet<V>();
+		Set<E> edgesCollector = new HashSet<E>();
+		Map<E, Pair<V>> endpoints = new HashMap<E, Pair<V>>();
+		for (V node : originGraph.getVertices()) {
+			nodesCollector.add(node);
 		}
-		for (E e : originGraph.getEdges()) {
-			tempGraph.addEdge(e, originGraph.getIncidentVertices(e));
+		for (E edge : originGraph.getEdges()) {
+			edgesCollector.add(edge);
+			endpoints.put(edge, originGraph.getEndpoints(edge));
 		}
-		/**
-		 * 找出各點k-core值後取得最大的k
-		 */
-		coreMap = getKcore(tempGraph);
-		List<Entry<?, Integer>> sortedKcore = sort(coreMap);
+		for (V n : nodesCollector) {
+			tempGraph.addVertex(n);
+		}
+		for (E e : edgesCollector) {
+			tempGraph.addEdge(e, endpoints.get(e));
+		}
+		/***/
+
+		coreMap = getKcore(tempGraph); // 找出各點k-core值後取得最大的k
+		List<Entry<?, Integer>> sortedKcore = sort(coreMap); // 排序
 		int maxK;
-		maxK=sortedKcore.get(0).getValue();
-		for (V node : originGraph.getVertices()) {	//只留下K-core最大的圖形
-			if(coreMap.get(node)!=maxK){
+		maxK = sortedKcore.get(0).getValue(); // 取得最大k
+		/**
+		 * 只留下K-core最大的圖形
+		 */
+		for (V node : originGraph.getVertices()) {
+			if (coreMap.get(node) != maxK) {
 				toRemoveVerteices.add(node);
 			}
 		}
-		for(V term:toRemoveVerteices){
+		for (V term : toRemoveVerteices) {
 			originGraph.removeVertex(term);
 		}
+		/***/
+
 		return originGraph;
 	}
 
@@ -93,29 +113,33 @@ public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 
 		Map<V, Integer> outputMap = new HashMap<V, Integer>();
 		Set<V> toRemoveVertexs = new HashSet<V>();
-		while ( inputGraph.getVertexCount() > 0) {
+		while (inputGraph.getVertexCount() > 0) { // 全部k都算完時，inputGraph為空
 			/**
 			 * 刪除degree<k的node
 			 */
-			for (V node : inputGraph.getVertices()) { //先存入toRemoveVertexs
-				if (inputGraph.degree(node) < k) {
-					toRemoveVertexs.add(node);
+			boolean statusChange = true;
+			while (statusChange) { // 有刪除點要重新算degree再刪
+				statusChange = false;
+				for (V node : inputGraph.getVertices()) { // 先存入toRemoveVertexs
+					if (inputGraph.degree(node) < k) {
+						toRemoveVertexs.add(node);
+						statusChange = true;
+					}
 				}
-			}
-			for(V node: toRemoveVertexs){	//圖形node從toRemoveVertexs中刪掉
-				inputGraph.removeVertex(node);
+				for (V node : toRemoveVertexs) { // 藉由toRemoveVertexs刪掉graph
+													// node
+					inputGraph.removeVertex(node);
+				}
 			}
 			/**
 			 * 剩餘node,K-core值至少大於k
 			 */
-			for (V node : inputGraph.getVertices()) { 
+			for (V node : inputGraph.getVertices()) {
 				outputMap.put(node, k);
 			}
 			k++;
 		}
 		return outputMap;
 	}
-
-
 
 }
