@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -50,8 +51,6 @@ public class NGDistanceDecoratorTest {
 		replay(mockComponent);
 		termContent = new HashMap<>();
 		termSearchResult = new HashMap<>();
-		/*testSubject = new NGDistanceDecorator<>(mockComponent, termContent,
-				termSearchResult, "http://TEST");*/
 		mockSearcher = createMock(IndexSearchable.class);
 		testSubject = new NGDistanceDecorator<KeyTerm, TestEdge>(mockComponent, termContent,
 				mockSearcher);
@@ -60,17 +59,20 @@ public class NGDistanceDecoratorTest {
 	@Test
 	public void testExecute() throws SolrServerException {
 		testSubject.searcher = mockSearcher;
-		expect(mockSearcher.searchTermSize(notNull(String.class)))
-				.andReturn((long) 1000).andReturn((long) 100)
-				.andReturn((long) 20).andReturn((long) 800).andReturn((long) 900)
-				.andReturn((long) 2000);
-		replay(mockSearcher);
-		KeyTerm term1 = new KeyTerm();
-		KeyTerm term2 = new KeyTerm();
-		KeyTerm term3 = new KeyTerm();
+		
+		KeyTerm term1 = new KeyTerm("apple");
+		KeyTerm term2 = new KeyTerm("banana");
+		KeyTerm term3 = new KeyTerm("orange");
 		this.termContent.put(term1, "apple");
 		this.termContent.put(term2, "banana");
-		this.termContent.put(term3, "orange");
+		this.termContent.put(term3, "orange");		
+		expect(mockSearcher.searchTermSize(termContent.get(term1))).andReturn(5000L);
+		expect(mockSearcher.searchTermSize(termContent.get(term2))).andReturn(8000L);
+		expect(mockSearcher.searchTermSize(termContent.get(term3))).andReturn(2000L);
+		expect(mockSearcher.searchMultipleTerm(isA(String[].class))).andReturn(1000L).times(3);
+		
+		replay(mockSearcher);
+
 		/*
 		 * this.termSearchResult.put(term1,(long)2000);
 		 * this.termSearchResult.put(term2,(long)6000);
@@ -79,7 +81,17 @@ public class NGDistanceDecoratorTest {
 		this.graph.addVertex(term1);
 		this.graph.addVertex(term2);
 		this.graph.addVertex(term3);
-
-		assertEquals(3, this.testSubject.execute(null).getEdgeCount());
+		Graph<KeyTerm, TestEdge> docGraph = this.testSubject.execute(null);
+		Map<TestEdge, Double> distances = this.testSubject.getEdgeDistance();
+		Double term1_term2 = (Math.max(Math.log10(5000L), Math.log10(8000L)) - Math.log10(1000L))
+				/ (6.4966 - Math.min(Math.log10(5000L), Math.log10(8000L)));
+		Double term2_term3 = (Math.max(Math.log10(8000L), Math.log10(2000L)) - Math.log10(1000L))
+				/ (6.4966 - Math.min(Math.log10(8000L), Math.log10(2000L)));
+		Double term1_term3 = (Math.max(Math.log10(5000L), Math.log10(2000L)) - Math.log10(1000L))
+				/ (6.4966 - Math.min(Math.log10(5000L), Math.log10(2000L)));
+		assertEquals(3,docGraph.getEdgeCount());
+		assertEquals(term1_term2,this.testSubject.edgeNGDistance.get(docGraph.findEdge(term1, term2)));
+		assertEquals(term2_term3,this.testSubject.edgeNGDistance.get(docGraph.findEdge(term2, term3)));
+		assertEquals(term1_term3,this.testSubject.edgeNGDistance.get(docGraph.findEdge(term1, term3)));
 	}
 }

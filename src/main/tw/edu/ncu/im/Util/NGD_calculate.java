@@ -10,7 +10,16 @@ public class NGD_calculate {
 		double NGD = 0;
 
 		NGD = (Math.max(logX, logY) - logM) / (logN - Math.min(logX, logY));
-
+		
+		if (logM == 0) {
+			NGD = 1;
+		}
+		if (NGD > 1) {
+			NGD = 1;
+		}
+		if (NGD < 0) {
+			NGD = 0;
+		}
 		return NGD;
 	}
 }
