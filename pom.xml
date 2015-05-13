@@ -58,6 +58,18 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/Qtag.jar</systemPath>
 		</dependency>
+
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.5.2</version>
+			<classifier>models</classifier>
+		</dependency>
 		<!-- FOR SOLR DEPENDENCY -->
 		<dependency>
 			<groupId>org.apache.solr</groupId>
