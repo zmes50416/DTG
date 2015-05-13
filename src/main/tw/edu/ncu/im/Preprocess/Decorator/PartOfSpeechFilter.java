@@ -66,13 +66,11 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 		for(V term:termsToRemove){
 			originGraph.removeVertex(term);
 		}
-		System.out.println(originGraph.getVertexCount());
 		for(String pharse:pharses){
 			V node = this.vertexFactory.create();
 			this.vertexResultsTerms.put(node, pharse);
 			originGraph.addVertex(node);
 		}
-		System.out.println(originGraph.getVertexCount());
 
 		return originGraph;
 	}
