@@ -1,7 +1,9 @@
 package tw.edu.ncu.im.Preprocess.Decorator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +70,8 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> originGraph = this.originComponent.execute(doc);
-		Collection<V> terms = originGraph.getVertices();
+		ArrayList<V> terms = new ArrayList<>( originGraph.getVertices());
+		
 		/**
 		 * 若termsSearchResult 為空 則先行計算
 		 */
@@ -98,9 +101,7 @@ public class NGDistanceDecorator<V, E> extends PreprocessDecorator<V, E> {
 					String term2Content = this.vertexTerms.get(term2);
 					long term2SearchResult = this.termsSearchResult.get(term2);
 					try {
-						term1term2Result = this.searcher
-								.searchTermSize(term1Content + "+"
-										+ term2Content);
+						term1term2Result = this.searcher.searchMultipleTerm(new String[]{term1Content,term2Content});
 					} catch (SolrServerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
