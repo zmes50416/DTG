@@ -3,10 +3,8 @@ package tw.edu.ncu.im.Util;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.core.CoreContainer;
 
 public abstract class IndexSearchable {
 	private static volatile SolrServer service; 
@@ -19,7 +17,7 @@ public abstract class IndexSearchable {
 	
 	public SolrServer getService(){
 		if(service==null){//Only enter this once in a runtime
-			synchronized(EmbeddedIndexSearcher.class){
+			synchronized(IndexSearchable.class){
 				if(service==null){//Have to check again or have chance to fail
 				service = initService();
 				}
