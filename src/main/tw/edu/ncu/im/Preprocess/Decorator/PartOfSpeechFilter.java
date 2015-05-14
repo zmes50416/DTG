@@ -36,11 +36,11 @@ public class PartOfSpeechFilter<V, E> extends PreprocessDecorator<V, E> {
 	/**
 	 * Constructor, 連結元件
 	 * @param _component latest document graph
-	 * @param _vertextTerms mapping between String content and Vertex
+	 * @param sentenceMap mapping between String content and Vertex
 	 */
-	public PartOfSpeechFilter(PreprocessComponent<V,E> _component,HashMap<V,String> _vertextTerms){
+	public PartOfSpeechFilter(PreprocessComponent<V,E> _component,Map<V, String> sentenceMap){
 		super(_component);		
-		this.vertextTerms = _vertextTerms;
+		this.vertextTerms = sentenceMap;
 	}
 	/**
 	 * 過濾非NN,NP的詞性，並且尋找可能的複合單字

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -32,12 +33,28 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	HashSet<KeyTerm> terms;
 	HashSet<TestEdge> edges;
 	Map<V,List<HasWord>> vertexContent = new HashMap<>();
+	Map<V,String> strings = new HashMap<>();
 	/**
 	 * @return the vertexContent
 	 */
 	public Map<V,List<HasWord>> getVertexContent() {
 		return vertexContent;
 	}
+	
+	public Map<V,String> getStringOfVertex(){
+		strings.clear();
+		for(Entry<V, List<HasWord>> sentencePair:vertexContent.entrySet()){
+			StringBuilder sentence = new StringBuilder();
+			for(HasWord word:sentencePair.getValue()){
+				sentence.append(word+" ");
+			}
+			
+			strings.put(sentencePair.getKey(), sentence.toString());
+		}
+		
+		return strings;
+	}
+	
 	public RouterNewsPreprocessor(Factory<V> _vertexFactory,Factory<E>_edgeFactory){
 		this.vertexFactory = _vertexFactory;
 		this.edgeFactory = _edgeFactory;
@@ -55,10 +72,22 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 				this.vertexContent.put(node, sentence);
 				documentGraph.addVertex(node);
 			}
+			
+			for(Entry<V, List<HasWord>> sentencePair:vertexContent.entrySet()){
+				StringBuilder sentence = new StringBuilder();
+				for(HasWord word:sentencePair.getValue()){
+					sentence.append(word+" ");
+				}
+				
+				strings.put(sentencePair.getKey(), sentence.toString());
+			}
+			
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		
 		return documentGraph;
 
 	}
