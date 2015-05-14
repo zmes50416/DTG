@@ -58,19 +58,16 @@ public class StandfordPartOfSpeechFiliter<V,E> extends PreprocessDecorator<V, E>
 		List<String> pharses = new ArrayList<>();
 		for (int i = 0; i < words.size(); i++) {
 			String key3 = words.get(i).word();
-			if ((words.get(i).tag().contains("NN") || words.get(i).tag().contains("NNP"))) { 	
+			if ((words.get(i).tag().contains("NN"))) { 	//tag are different than old pos, have to included the countable noun
 				pharses.add(key3);
 				try {// 組合字過濾
 					String key2 = words.get(i-1).word();
 					if (words.get(i-1).tag().equals("JJ")) {
 						String combinePharse = key2 + "+" + key3;
 						pharses.add(combinePharse);
-					} else if (words.get(i-1).tag().contains("NN")
-							|| words.get(i - 1).tag().contains("NNP")) {
+					} else if (words.get(i-1).tag().contains("NN")) {
 						String key1 = words.get(i-2).word();
-						if (words.get(i-2).tag().contains("NN")
-								|| words.get(i-2).tag().contains("NNP")
-								|| words.get(i-2).tag().equals("JJ")) {
+						if (words.get(i-2).tag().contains("NN")	|| words.get(i-2).tag().equals("JJ")) {
 							String combineThirdPharse = key1 + "+" + key2
 									+ "+" + key3;
 							pharses.add(combineThirdPharse);
