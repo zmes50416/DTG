@@ -56,8 +56,7 @@ public class SearchResultFilterTest {
 	@Test
 	public void testExecute() throws SolrServerException {
 
-		expect(mockSearcher.searchTermSize(notNull(String.class))).andReturn((long) 100).andReturn((long) 1000000).andReturn((long) 1);
-		replay(mockSearcher);
+	
 		KeyTerm term1 = new KeyTerm();
 		KeyTerm term2 = new KeyTerm();
 		KeyTerm term3 = new KeyTerm();
@@ -67,10 +66,16 @@ public class SearchResultFilterTest {
 		this.graph.addVertex(term1);
 		this.graph.addVertex(term2);
 		this.graph.addVertex(term3);
+		
+		expect(mockSearcher.searchTermSize("computer")).andReturn(100L);
+		expect(mockSearcher.searchTermSize("sience")).andReturn(10000000L);
+		expect(mockSearcher.searchTermSize("technology")).andReturn(1L);
+		replay(mockSearcher);
+
 		this.testSubject.execute(null);
 		assertEquals(1,this.graph.getVertexCount());
 		assertEquals(1,testSubject.termsSearchResult.size());
-		assertEquals("100",testSubject.termsSearchResult.get(term2).toString());
+		assertTrue("Should leave term1",testSubject.termsSearchResult.containsKey(term1));
 	}
 
 }
