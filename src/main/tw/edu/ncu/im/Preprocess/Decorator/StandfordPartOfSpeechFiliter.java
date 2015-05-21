@@ -21,7 +21,7 @@ public class StandfordPartOfSpeechFiliter<V,E> extends PreprocessDecorator<V, E>
 	 */
 	Map<V,String> vertexResultsTerms = new HashMap<V,String>();
 	Map<V,List<HasWord>> vertextTerms;
-	static MaxentTagger tagger = new MaxentTagger("tagger-models/english-bidirectional-distsim.tagger");// 單字過濾，根據Standford 的POS
+	static MaxentTagger tagger = new MaxentTagger("tagger-models/english-left3words-distsim.tagger");// 單字過濾，根據Standford 的POS
 
 	public StandfordPartOfSpeechFiliter(PreprocessComponent<V, E> _component,Map<V,List<HasWord>> _vertextTerms) {
 		super(_component);
