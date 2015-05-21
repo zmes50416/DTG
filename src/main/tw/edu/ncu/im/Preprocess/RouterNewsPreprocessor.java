@@ -2,9 +2,9 @@ package tw.edu.ncu.im.Preprocess;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,16 +42,6 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	}
 	
 	public Map<V,String> getStringOfVertex(){
-		strings.clear();
-		for(Entry<V, List<HasWord>> sentencePair:vertexContent.entrySet()){
-			StringBuilder sentence = new StringBuilder();
-			for(HasWord word:sentencePair.getValue()){
-				sentence.append(word+" ");
-			}
-			
-			strings.put(sentencePair.getKey(), sentence.toString());
-		}
-		
 		return strings;
 	}
 	
@@ -63,11 +53,14 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> documentGraph = new UndirectedSparseGraph<V, E>();
-		try {
-			List<List<HasWord>> sentences = null;
-			sentences = MaxentTagger.tokenizeText(new FileReader(doc));
-
-			for (List<HasWord> sentence : sentences) {
+		try (BufferedReader docReader = new BufferedReader(new FileReader(doc))){
+			//First Line of Router data is title and Second Line is content
+			List<List<HasWord>> title =  MaxentTagger.tokenizeText(new StringReader(docReader.readLine()));
+			V titleNode = this.vertexFactory.create();
+			this.vertexContent.put(titleNode, title.get(0));
+			documentGraph.addVertex(titleNode);
+			List<List<HasWord>> contents = MaxentTagger.tokenizeText(new StringReader(docReader.readLine()));
+			for (List<HasWord> sentence : contents) {
 				V node = this.vertexFactory.create();
 				this.vertexContent.put(node, sentence);
 				documentGraph.addVertex(node);
@@ -83,7 +76,7 @@ public class RouterNewsPreprocessor<V,E> extends PreprocessComponent<V,E> {
 			}
 			
 
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		

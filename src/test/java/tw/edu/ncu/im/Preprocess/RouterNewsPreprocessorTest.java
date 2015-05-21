@@ -29,7 +29,9 @@ public class RouterNewsPreprocessorTest {
 		tempFile = Files.createTempDirectory("routerTest_").resolve("test.txt");
 		origin = tempFile.toFile();
 		try(BufferedWriter b = new BufferedWriter(new FileWriter(origin))){
-			b.append("<There> is an apple."+ System.getProperty("line.separator"));
+			b.append("news title");
+			b.newLine();
+			b.append("There is an <apple>.");
 			b.append("National Central University!");
 		}catch(IOException e){
 			e.printStackTrace();
