@@ -99,10 +99,10 @@ public class NgdEdgeFilterTest {
 		assertEquals(this.termContent.size(),graph.getVertexCount());
 		assertEquals("0.5",this.testSubject.rankThresholdPercent.toString());
 		assertEquals(3,this.graph.getEdgeCount());
-		assertEquals(null,this.testSubject.ngdMap.get(edge1));
-		assertEquals(null,this.testSubject.ngdMap.get(edge2));
-		assertEquals(null,this.testSubject.ngdMap.get(edge6));
-		assertEquals(null,this.testSubject.ngdMap.get(edge7));
+		assertEquals(null,this.testSubject.getNgdMap().get(edge1));
+		assertEquals(null,this.testSubject.getNgdMap().get(edge2));
+		assertEquals(null,this.testSubject.getNgdMap().get(edge6));
+		assertEquals(null,this.testSubject.getNgdMap().get(edge7));
 		assertEquals(true,this.graph.containsEdge(edge3));
 		assertEquals(true,this.graph.containsEdge(edge4));
 		assertEquals(true,this.graph.containsEdge(edge5));
