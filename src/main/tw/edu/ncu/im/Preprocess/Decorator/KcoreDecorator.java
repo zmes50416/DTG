@@ -31,7 +31,16 @@ public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 	Map<E, Double> ngdMap = new HashMap<E, Double>();
 	Map<V, Integer> coreMap = new HashMap<V, Integer>();
 	Double edgeThreshold;
-
+	/**
+	 * getter and setter
+	 */
+	public Map<V, Integer> getCoreMap() {
+		return coreMap;
+	}
+	public void setCoreMap(Map<V, Integer> coreMap) {
+		this.coreMap = coreMap;
+	}
+	
 	public KcoreDecorator(PreprocessComponent<V, E> _component,
 			Map<E, Double> _edgeDistance, Double _edgeThreshold) {
 		super(_component);
@@ -76,15 +85,15 @@ public class KcoreDecorator<V, E> extends PreprocessDecorator<V, E> {
 		}
 		/***/
 
-		coreMap = getKcore(tempGraph); // 找出各點k-core值後取得最大的k
-		List<Entry<?, Integer>> sortedKcore = sort(coreMap); // 排序
+		setCoreMap(getKcore(tempGraph)); // 找出各點k-core值後取得最大的k
+		List<Entry<?, Integer>> sortedKcore = sort(getCoreMap()); // 排序
 		int maxK;
 		maxK = sortedKcore.get(0).getValue(); // 取得最大k
 		/**
 		 * 只留下K-core最大的圖形
 		 */
 		for (V node : originGraph.getVertices()) {
-			if (coreMap.get(node) != maxK) {
+			if (getCoreMap().get(node) != maxK) {
 				toRemoveVerteices.add(node);
 			}
 		}
