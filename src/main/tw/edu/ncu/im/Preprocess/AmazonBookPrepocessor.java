@@ -23,7 +23,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 public class AmazonBookPrepocessor<V,E> extends PreprocessComponent<V,E> {
 	HashSet<KeyTerm> terms;
 	HashSet<TestEdge> edges;
-	HashMap<V,String> vertexContent = new HashMap<>();
+	public HashMap<V,String> vertexContent = new HashMap<>();
 	public AmazonBookPrepocessor(Factory<V> _vertexFactory,Factory<E>_edgeFactory){
 		this.vertexFactory = _vertexFactory;
 		this.edgeFactory = _edgeFactory;
