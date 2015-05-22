@@ -20,8 +20,17 @@ import tw.edu.ncu.im.Util.NgdEdgeSorter;
  * @param <E>
  */
 public class NgdEdgeFilter<V, E> extends PreprocessDecorator<V, E> {
-	Map<E, Double> ngdMap = new HashMap<E, Double>();
+	private Map<E, Double> ngdMap = new HashMap<E, Double>();
 	Double rankThresholdPercent;
+/**
+ * getter and setter
+ */
+	public Map<E, Double> getNgdMap() {
+		return ngdMap;
+	}
+	public void setNgdMap(Map<E, Double> ngdMap) {
+		this.ngdMap = ngdMap;
+	}
 
 	/**
 	 * @param _component
@@ -32,7 +41,7 @@ public class NgdEdgeFilter<V, E> extends PreprocessDecorator<V, E> {
 	 */
 	public NgdEdgeFilter(PreprocessComponent<V, E> _component, Map<E, Double> _edgeDistance, double _rankThreshold) {
 		super(_component);
-		this.ngdMap = _edgeDistance;
+		this.setNgdMap(_edgeDistance);
 		this.rankThresholdPercent = _rankThreshold;
 		
 	}
@@ -41,16 +50,16 @@ public class NgdEdgeFilter<V, E> extends PreprocessDecorator<V, E> {
 	@Override
 	public Graph<V, E> execute(File doc) {
 		Graph<V, E> originGraph = this.originComponent.execute(doc);
-		if(ngdMap.size()!=originGraph.getEdgeCount()){
+		if(getNgdMap().size()!=originGraph.getEdgeCount()){
 			throw new IllegalStateException("the map should sync with the graph");
 		}
 		int rankThreshold = (int) (rankThresholdPercent * originGraph.getEdgeCount());
 		
-		List<Entry<?, Double>> sortedEdge = NgdEdgeSorter.sort(ngdMap);
+		List<Entry<?, Double>> sortedEdge = NgdEdgeSorter.sort(getNgdMap());
 		
-		for (int index = ngdMap.size(); index > rankThreshold; index=index-1) {
+		for (int index = getNgdMap().size(); index > rankThreshold; index=index-1) {
 			Object edgeUnderThreshold = sortedEdge.get(index-1).getKey();
-			ngdMap.remove((E) edgeUnderThreshold);
+			getNgdMap().remove((E) edgeUnderThreshold);
 			originGraph.removeEdge((E) edgeUnderThreshold);
 		}
 		return originGraph;
