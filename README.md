@@ -9,3 +9,8 @@ reader transfer texts into vertexs(nodes) and different components(TF, POS, NGD,
 
 ## output
 we implements plain text and xml format of output. 
+
+# third party
+we use jung [Java Universal Network/Graph Framework](http://jung.sourceforge.net) for graph itself.
+some preprocesser base on [standford nlp software](https://nlp.stanford.edu/software/).
+we also write some test code on Junit and easymock.
